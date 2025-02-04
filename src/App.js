@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { Button } from 'antd';
 import MyMenu from './components/nav/Menu';
+import MainLayout from './components/layout/MainLayout';
 
 function App() {
   return (
@@ -13,8 +14,9 @@ function App() {
         </p>
       </header>
       <body>
-        <Button type='primary'>测试antDesign</Button>
-        <MyMenu />
+        <div>
+        <MainLayout menu={<MyMenu/>}/>
+        </div>
       </body>
     </div>
   );
