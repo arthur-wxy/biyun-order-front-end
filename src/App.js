@@ -3,21 +3,15 @@ import './App.css';
 import { Button } from 'antd';
 import MyMenu from './components/nav/Menu';
 import MainLayout from './components/layout/MainLayout';
+import OrderSearchForm from './components/order_query/OrderSearchForm';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-      </header>
-      <body>
-        <div>
-        <MainLayout menu={<MyMenu/>}/>
-        </div>
-      </body>
+      <MainLayout
+        menu={<MyMenu />}
+        content={<OrderSearchForm />}
+      />
     </div>
   );
 }

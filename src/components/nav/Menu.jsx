@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Menu } from "antd";
+import { Button, Menu, Image } from "antd";
 import {
     AppstoreOutlined,
     ContainerOutlined,
@@ -11,14 +11,21 @@ import {
   } from '@ant-design/icons';
 import { useInternalApi } from "../../network/internalApi";
   
-const MyMenu = () => {
+const MyMenu = (props) => {
   const [items, setItems] = useState(null);
   const internalApi = useInternalApi();
   useEffect(()=>{
     internalApi.get("/menu/getMenuConf.json", {})
     .then(response => {
       if(response.data.success) {
-        setItems(response.data.content)
+        const realItems = response.data.content.map(item => {
+          const icon = item.icon == null ? null : (<Image src={item.icon} preview={false}/>)
+          return {
+            ...item,
+            icon:icon
+          };
+        });
+        setItems(realItems)
       }
     })
     .catch(error => {
@@ -26,31 +33,13 @@ const MyMenu = () => {
       setItems([]);
     })
   }, []);
-  const [collapsed, setCollapsed] = useState(false);
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
-  };
   return (<>
-  <div
-      style={{
-        width: 256,
-      }}
-    >
-      <Button
-        type="primary"
-        onClick={toggleCollapsed}
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
+  <div>
       <Menu
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         mode="inline"
         theme="dark"
-        inlineCollapsed={collapsed}
         items={items}
       />
     </div>

@@ -1,11 +1,4 @@
 import React, { useState } from 'react';
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import CompanyIntroduction from './SilderHeader';
 
@@ -24,7 +17,7 @@ const MainLayout = ({ logo=getDefaultLogo(), menu, header, content, footer}) => 
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   return (
-    <Layout style={{ minHeight: '1000vh' }}>
+    <Layout style={{ minHeight: '1000vh', width:'256' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
         {logo}
         {menu}
