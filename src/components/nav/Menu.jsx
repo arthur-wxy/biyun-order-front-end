@@ -1,52 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { Button, Menu, Image, Switch } from "antd";
-import { useInternalApi } from "../../network/internalApi";
-import { Link } from "react-router-dom";
-import OrderSearchForm from "../order_query/OrderSearchForm";
+import React from 'react';
+import { Menu, Spin } from 'antd';
+import { Link, useLocation } from 'react-router-dom';
+import { useMenu } from './hooks/useMenu';
+import { DEFAULT_MENU_CONFIG } from '../../network/config';
 
-const MyMenu = (props) => {
-  const [items, setItems] = useState([]);
-  const internalApi = useInternalApi();
-  useEffect(() => {
-    internalApi.get("/menu/getMenuConf.json", {})
-      .then(response => {
-        if (response.data.success) {
-          const realItems = response.data.content.map(item => {
-            const result = {
-              ...item,
-              label: <Link to={item.link}>{item.label}</Link>,
-              icon: item.icon == null ? null : (<Image src={item.icon} preview={false} />)
-            };
-            if (result.children) {
-              const newChildren = result.children.map(i => {
-                return {
-                  ...i,
-                  label: <Link to={i.link}>{i.label}</Link>,
-                  icon: i.icon == null ? null : (<Image src={i.icon} preview={false} />)
-                }
-              });
-              result.children = newChildren;
-            }
-            console.log(result);
-            return result;
-          });
-          setItems(realItems)
-        }
-      })
-      .catch(error => {
-        console.log("error occurs!");
-        setItems([]);
-      })
-  }, []);
-  return (<>
-    <Menu
-      defaultSelectedKeys={['order_query']}
-      defaultOpenKeys={['order_manage']}
-      mode="inline"
-      theme="dark"
-      items={items}
-    />
-  </>);
-}
+const renderMenuItem = (item) => {
+  if (item.children) {
+    return {
+      key: item.key,
+      label: item.label,
+      icon: item.icon,
+      children: item.children.map(child => renderMenuItem(child))
+    };
+  }
 
-export default MyMenu;
+  return {
+    key: item.key,
+    label: item.path ? <Link to={item.path}>{item.label}</Link> : item.label,
+    icon: item.icon
+  };
+};
+
+const AppMenu = () => {
+  const location = useLocation();
+  const { menuItems, loading, error } = useMenu();
+
+  // 添加日志
+  console.log('Current menu items:', menuItems);
+  console.log('Is Array?', Array.isArray(menuItems));
+  
+  const items = Array.isArray(menuItems) ? menuItems : DEFAULT_MENU_CONFIG;
+  const processedItems = items.map(item => renderMenuItem(item));
+
+  return (
+    <>
+      {loading && (
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <Spin size="small" />
+        </div>
+      )}
+      <Menu
+        theme="dark"
+        mode="inline"
+        selectedKeys={[location.pathname]}
+        defaultOpenKeys={['order_manage']} // 默认展开订单管理
+        items={processedItems}
+      />
+    </>
+  );
+};
+
+export default React.memo(AppMenu);
