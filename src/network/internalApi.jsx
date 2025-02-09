@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const internalApi = axios.create({
-    baseURL: 'http://122.51.57.37:8080/', 
+    // baseURL: 'http://122.51.57.37/api/', 
+    baseURL: 'http://localhost:8080/api/', 
     timeout: 1000,
     headers: { 'Content-Type': 'application/json' },
 });
