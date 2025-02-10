@@ -1,18 +1,24 @@
 import React, { useState, useCallback } from 'react';
-import { Layout, theme } from 'antd';
-import SiderHeader from './SiderHeader';
+import { Button } from 'antd';
+import { MenuFoldOutlined, MenuUnfoldOutlined, GlobalOutlined } from '@ant-design/icons';
 import { Routes, Route } from 'react-router-dom';
+import { useLocale } from '../../hooks/useLocale';
 import { routes } from '../../routes';
-import { layoutStyles } from '../../styles/layoutStyles';
 import { ThemeProvider } from 'styled-components';
+import { lightTheme } from '../../styles/theme';
+import { GlobalStyles } from '../../styles/GlobalStyles';
+import SiderHeader from './SiderHeader';
+import {
+  StyledLayout,
+  StyledSider,
+  StyledHeader,
+  StyledContent,
+  ContentWrapper,
+  InnerLayout
+} from './styles/Layout.styles';
 
-const { Header, Content, Footer, Sider } = Layout;
-
-// 主题配置
-const customTheme = {
-  siderHeaderBg: 'rgba(255, 255, 255, 0.1)',
-  // 其他主题变量...
-};
+const SIDER_WIDTH = 200;
+const COLLAPSED_WIDTH = 80;
 
 // 获取默认Logo组件
 const getDefaultLogo = (collapsed) => (
@@ -22,53 +28,61 @@ const getDefaultLogo = (collapsed) => (
   />
 );
 
-// 主布局组件
 const MainLayout = ({ logo, menu }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  const { toggleLocale, locale } = useLocale();
 
   const handleCollapse = useCallback((value) => {
     setCollapsed(value);
   }, []);
 
+  const siderWidth = collapsed ? COLLAPSED_WIDTH : SIDER_WIDTH;
+
   return (
-    <ThemeProvider theme={customTheme}>
-      <Layout style={{ minHeight: '100vh' }}>
-        <Sider 
-          collapsible 
-          collapsed={collapsed} 
+    <ThemeProvider theme={lightTheme}>
+      <GlobalStyles />
+      <StyledLayout>
+        <StyledSider
+          collapsible
+          collapsed={collapsed}
           onCollapse={handleCollapse}
-          {...layoutStyles.sider}
+          breakpoint="lg"
+          collapsedWidth={COLLAPSED_WIDTH}
+          width={SIDER_WIDTH}
         >
           {logo || getDefaultLogo(collapsed)}
           {menu}
-        </Sider>
-        <Layout>
-          <Header style={{ 
-            ...layoutStyles.header,
-            background: colorBgContainer 
-          }} />
-          <Content style={{ 
-            ...layoutStyles.content,
-            background: colorBgContainer
-          }}>
-            <Routes>
-              {routes.map(route => (
-                <Route 
-                  key={route.path}
-                  path={route.path}
-                  element={route.element}
-                />
-              ))}
-            </Routes>
-          </Content>
-          <Footer style={layoutStyles.footer}>
-            ©2024 Created by Your Company
-          </Footer>
-        </Layout>
-      </Layout>
+        </StyledSider>
+        <InnerLayout $siderWidth={siderWidth}>
+          <StyledHeader $siderWidth={siderWidth}>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              className="trigger"
+            />
+            <Button
+              icon={<GlobalOutlined />}
+              onClick={toggleLocale}
+            >
+              {locale.startsWith('zh') ? 'English' : '中文'}
+            </Button>
+          </StyledHeader>
+          <StyledContent>
+            <ContentWrapper>
+              <Routes>
+                {routes.map(route => (
+                  <Route
+                    key={route.path}
+                    path={route.path}
+                    element={route.element}
+                  />
+                ))}
+              </Routes>
+            </ContentWrapper>
+          </StyledContent>
+        </InnerLayout>
+      </StyledLayout>
     </ThemeProvider>
   );
 };

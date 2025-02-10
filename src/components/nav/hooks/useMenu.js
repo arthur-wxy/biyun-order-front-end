@@ -29,37 +29,39 @@ const transformMenuData = (menuData) => {
 };
 
 export const useMenu = () => {
-  const [menuItems, setMenuItems] = useState(DEFAULT_MENU_CONFIG);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const api = useInternalApi();
-
-  useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get(ENDPOINTS.MENU);
-        console.log('Menu API Response:', response);
-        
-        if (response?.data?.success && Array.isArray(response.data.content)) {
-          const transformedMenu = transformMenuData(response.data.content);
-          console.log('Transformed menu items:', transformedMenu);
-          setMenuItems(transformedMenu);
-        } else {
-          console.warn('Invalid menu data:', response);
-          setMenuItems(DEFAULT_MENU_CONFIG);
+  const [menuItems, setMenuItems] = useState([
+    {
+      key: 'summary',
+      label: 'menu.summary',
+      path: '/summary'
+    },
+    {
+      key: 'order_manage',
+      label: 'menu.order_manage',
+      children: [
+        {
+          key: 'order_query',
+          label: 'menu.order_query',
+          path: '/order_query'
+        },
+        {
+          key: 'order_import',
+          label: 'menu.order_import',
+          path: '/order_import'
         }
-      } catch (err) {
-        console.error('Failed to fetch menu:', err);
-        setError(err.message);
-        setMenuItems(DEFAULT_MENU_CONFIG);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMenu();
-  }, []);
+      ]
+    },
+    {
+      key: 'bill_manage',
+      label: 'menu.bill_manage'
+    },
+    {
+      key: 'logistics_manage',
+      label: 'menu.logistics_manage'
+    }
+  ]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   return { 
     menuItems, 

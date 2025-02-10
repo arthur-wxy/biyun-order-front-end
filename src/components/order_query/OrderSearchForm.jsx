@@ -5,10 +5,12 @@ import { searchFields } from './constants';
 import { SearchField } from './SearchField';
 import { fetchOrders } from '../../store/slices/orderSlice';
 import { useSearchForm } from './hooks/useSearchForm';
+import { useIntl } from 'react-intl';
 
 const OrderSearchForm = () => {
     const dispatch = useDispatch();
     const { form, expand, toggleExpand, handleReset } = useSearchForm();
+    const intl = useIntl();
 
     const handleSubmit = useCallback((values) => {
         dispatch(fetchOrders(values));
@@ -26,13 +28,13 @@ const OrderSearchForm = () => {
             <Row justify="end">
                 <Space>
                     <Button type="primary" htmlType="submit">
-                        搜索
+                        {intl.formatMessage({ id: 'order.search.submit' })}
                     </Button>
                     <Button onClick={handleReset}>
-                        重置
+                        {intl.formatMessage({ id: 'order.search.reset' })}
                     </Button>
                     <Button type="link" onClick={toggleExpand}>
-                        {expand ? '收起' : '展开'} 
+                        {expand ? intl.formatMessage({ id: 'order.search.collapse' }) : intl.formatMessage({ id: 'order.search.expand' })} 
                     </Button>
                 </Space>
             </Row>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload, Form, Select, Progress } from 'antd';
 import { useInternalApi } from '../../network/internalApi';
-import { API_CONFIG } from '../../network/config';
+import { useIntl } from 'react-intl';
 
 const { Dragger } = Upload;
 const { Option } = Select;
@@ -17,6 +17,7 @@ const OrderImport = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState('normal'); // 'normal', 'active', 'success', 'exception'
   const api = useInternalApi();
+  const intl = useIntl();
 
   const handleUpload = async (file) => {
     const formData = new FormData();
@@ -43,7 +44,7 @@ const OrderImport = () => {
       // 检查上传结果
       if (response.success) {
         setUploadStatus('success');
-        message.success('文件上传成功');
+        message.success(intl.formatMessage({ id: 'order.import.success' }));
         setFileList([]);
         
         // 如果需要处理解析的数据
@@ -54,12 +55,12 @@ const OrderImport = () => {
         }
       } else {
         setUploadStatus('exception');
-        message.error(response.errorMsg || '文件解析失败');
+        message.error(response.errorMsg || intl.formatMessage({ id: 'order.import.fail' }));
       }
     } catch (error) {
       console.error('Upload error:', error);
       setUploadStatus('exception');
-      message.error(error.response?.data?.errorMsg || '上传失败，请重试');
+      message.error(error.response?.data?.errorMsg || intl.formatMessage({ id: 'order.import.fail' }));
     } finally {
       setUploading(false);
       // 只有在失败时才立即清除进度条
@@ -89,7 +90,10 @@ const OrderImport = () => {
     beforeUpload: (file) => {
       // 检查文件大小
       if (file.size > MAX_FILE_SIZE) {
-        message.error(`文件大小不能超过 ${MAX_FILE_SIZE / 1024 / 1024}MB！`);
+        message.error(intl.formatMessage(
+          { id: 'order.import.sizeLimit' },
+          { size: MAX_FILE_SIZE / 1024 / 1024 }
+        ));
         return false;
       }
 
@@ -97,7 +101,7 @@ const OrderImport = () => {
       const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
                       file.type === 'application/vnd.ms-excel';
       if (!isExcel) {
-        message.error('只能上传 Excel 文件！');
+        message.error(intl.formatMessage({ id: 'order.import.hint' }));
         return false;
       }
       return true;
@@ -118,7 +122,7 @@ const OrderImport = () => {
     <div style={{ padding: '24px' }}>
       <Form layout="vertical">
         <Form.Item 
-          label="导入类型" 
+          label={intl.formatMessage({ id: 'order.import.type' })}
           required
           style={{ marginBottom: '24px' }}
         >
@@ -127,8 +131,12 @@ const OrderImport = () => {
             onChange={setImportType}
             style={{ width: '200px' }}
           >
-            <Option value="ORDER">订单导入</Option>
-            <Option value="PRODUCT">商品导入</Option>
+            <Option value="ORDER">
+              {intl.formatMessage({ id: 'order.import.type.order' })}
+            </Option>
+            <Option value="PRODUCT">
+              {intl.formatMessage({ id: 'order.import.type.product' })}
+            </Option>
           </Select>
         </Form.Item>
 
@@ -136,13 +144,20 @@ const OrderImport = () => {
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
-          <p className="ant-upload-text">点击上传或拖拽文件到此处</p>
-          <p className="ant-upload-hint">
-            仅支持 .xlsx 或 .xls 格式的 Excel 文件
-            <br />
-            文件大小不能超过 {MAX_FILE_SIZE / 1024 / 1024}MB
+          <p className="ant-upload-text">
+            {intl.formatMessage({ id: 'order.import.dragText' })}
           </p>
-          {uploading && <p>文件上传中...</p>}
+          <p className="ant-upload-hint">
+            {intl.formatMessage({ id: 'order.import.hint' })}
+            <br />
+            {intl.formatMessage(
+              { id: 'order.import.sizeLimit' },
+              { size: MAX_FILE_SIZE / 1024 / 1024 }
+            )}
+          </p>
+          {uploading && (
+            <p>{intl.formatMessage({ id: 'order.import.uploading' })}</p>
+          )}
         </Dragger>
 
         {/* 上传进度条 */}
