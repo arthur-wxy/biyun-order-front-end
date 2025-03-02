@@ -26,6 +26,23 @@ const OrderImport = () => {
   const api = useInternalApi();
   const intl = useIntl();
 
+  // 添加数据转换函数
+  const transformOrderData = (apiData) => {
+    return apiData.map(item => ({
+      orderNo: item.orderNumber,
+      externalOrderNo: item.externalOrderId,
+      productName: item.productName,
+      productSku: item.sku,
+      amount: parseFloat(item.orderAmount),
+      receiver: item.actualCustomer,
+      phone: item.customerPhone,
+      status: item.orderStatus,
+      createTime: item.orderCreateTime,
+      productImage: item.orderPreviewUrl || '/fallback-image.png',
+      productThumbnail: item.orderPreviewUrl || '/fallback-image.png'
+    }));
+  };
+
   const handleUpload = async (file) => {
     setUploading(true);
     setUploadProgress(0);
@@ -94,9 +111,10 @@ const OrderImport = () => {
           setUploadStatus('success');
           message.success(intl.formatMessage({ id: 'order.import.success' }));
           
-          // 使用接口返回的数据
+          // 转换并使用接口返回的数据
           if (response.data?.content) {
-            setImportedData(response.data.content);
+            const transformedData = transformOrderData(response.data.content);
+            setImportedData(transformedData);
             setShowTable(true);
           }
         } else {

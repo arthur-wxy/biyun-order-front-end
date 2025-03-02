@@ -7,33 +7,16 @@ const OrderTable = ({ data, loading }) => {
     
     const columns = [
         {
-            title: intl.formatMessage({ id: 'table.column.image' }),
-            dataIndex: 'productImage',
-            key: 'productImage',
-            width: 100,
-            render: (image, record) => (
-                <Image
-                    src={record.productThumbnail || '/fallback-image.png'}
-                    alt={record.productName}
-                    preview={{
-                        src: record.productImage || '/fallback-image.png',
-                    }}
-                    style={{
-                        width: '50px',
-                        height: '50px',
-                        objectFit: 'cover',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
-                    fallback="/fallback-image.png"
-                />
-            ),
-        },
-        {
             title: intl.formatMessage({ id: 'table.column.orderNo' }),
             dataIndex: 'orderNo',
             key: 'orderNo',
-            width: 200,
+            width: 150,
+        },
+        {
+            title: intl.formatMessage({ id: 'table.column.externalOrderNo' }),
+            dataIndex: 'externalOrderNo',
+            key: 'externalOrderNo',
+            width: 150,
         },
         {
             title: intl.formatMessage({ id: 'table.column.productInfo' }),
@@ -59,12 +42,11 @@ const OrderTable = ({ data, loading }) => {
             title: intl.formatMessage({ id: 'table.column.receiver' }),
             dataIndex: 'receiver',
             key: 'receiver',
-            width: 200,
+            width: 150,
             render: (text, record) => (
                 <Space direction="vertical" size="small">
                     <div>{record.receiver}</div>
                     <div style={{ color: '#666' }}>{record.phone}</div>
-                    <div style={{ color: '#666', fontSize: '12px' }}>{record.address}</div>
                 </Space>
             ),
         },
@@ -94,6 +76,39 @@ const OrderTable = ({ data, loading }) => {
             width: 180,
         },
         {
+            title: intl.formatMessage({ id: 'table.column.image' }),
+            dataIndex: 'productImage',
+            key: 'productImage',
+            width: 100,
+            render: (image) => (
+                image ? (
+                    <Image
+                        src={image}
+                        style={{
+                            width: '50px',
+                            height: '50px',
+                            objectFit: 'cover',
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                        fallback="/fallback-image.png"
+                    />
+                ) : (
+                    <div style={{
+                        width: '50px',
+                        height: '50px',
+                        background: '#f5f5f5',
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        N/A
+                    </div>
+                )
+            ),
+        },
+        {
             title: intl.formatMessage({ id: 'table.column.operation' }),
             key: 'operation',
             fixed: 'right',
@@ -117,7 +132,7 @@ const OrderTable = ({ data, loading }) => {
             dataSource={data}
             loading={loading}
             rowKey="orderNo"
-            scroll={{ x: 1400 }}
+            scroll={{ x: 1500 }}
             pagination={{
                 total: data?.length,
                 pageSize: 10,
