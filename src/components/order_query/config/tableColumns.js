@@ -2,7 +2,7 @@ import { Space, Tag, Button, Image, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import React from 'react';
 
-export const getOrderColumns = (intl, { onEdit, onDelete, refreshData, handleDelete }) => [
+export const getOrderColumns = (intl, { onEdit, onDelete, refreshData, handleDelete, isSelectionMode }) => [
     {
         title: intl.formatMessage({ id: 'table.column.orderNo' }),
         dataIndex: 'orderNo',
@@ -109,31 +109,37 @@ export const getOrderColumns = (intl, { onEdit, onDelete, refreshData, handleDel
         title: intl.formatMessage({ id: 'table.column.operation' }),
         key: 'operation',
         fixed: 'right',
-        width: 120,
+        width: 100,
         render: (_, record) => (
-            <Space size="middle">
-                <Button
-                    type="link"
-                    icon={<EditOutlined />}
-                    onClick={() => onEdit(record)}
-                >
-                    {intl.formatMessage({ id: 'table.operation.edit' })}
-                </Button>
-                <Popconfirm
-                    title={intl.formatMessage({ id: 'order.delete.confirm' })}
-                    onConfirm={() => handleDelete(record)}
-                    okText={intl.formatMessage({ id: 'common.yes' })}
-                    cancelText={intl.formatMessage({ id: 'common.no' })}
-                >
+            !isSelectionMode && (
+                <Space direction="vertical" size={0} style={{ width: '100%' }}>
                     <Button
                         type="link"
-                        danger
-                        icon={<DeleteOutlined />}
+                        size="small"
+                        icon={<EditOutlined />}
+                        onClick={() => onEdit(record)}
+                        style={{ padding: '4px 0' }}
                     >
-                        {intl.formatMessage({ id: 'table.operation.delete' })}
+                        {intl.formatMessage({ id: 'table.operation.edit' })}
                     </Button>
-                </Popconfirm>
-            </Space>
+                    <Popconfirm
+                        title={intl.formatMessage({ id: 'order.delete.confirm' })}
+                        onConfirm={() => handleDelete(record)}
+                        okText={intl.formatMessage({ id: 'common.yes' })}
+                        cancelText={intl.formatMessage({ id: 'common.no' })}
+                    >
+                        <Button
+                            type="link"
+                            size="small"
+                            danger
+                            icon={<DeleteOutlined />}
+                            style={{ padding: '4px 0' }}
+                        >
+                            {intl.formatMessage({ id: 'table.operation.delete' })}
+                        </Button>
+                    </Popconfirm>
+                </Space>
+            )
         ),
     },
 ]; 

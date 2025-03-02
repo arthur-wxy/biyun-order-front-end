@@ -72,5 +72,13 @@ export default {
   'order.delete.fail': '订单删除失败',
   'common.yes': '确定',
   'common.no': '取消',
-  'table.column.phone': '联系电话'
+  'table.column.phone': '联系电话',
+  'table.selectAll.allPages': '选择所有页',
+  'table.selectAll.clear': '清除所有选择',
+  'table.selected.all': '已选择全部数据',
+  'table.selected.count': '已选择 {count} 项',
+  'table.operation.batchDelete': '批量删除',
+  'order.batchDelete.confirm': '确定要删除选中的订单吗？',
+  'order.batchDelete.success': '批量删除成功',
+  'order.batchDelete.fail': '批量删除失败'
 }; 

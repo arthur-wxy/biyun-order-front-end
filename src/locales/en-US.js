@@ -72,5 +72,13 @@ export default {
   'order.delete.fail': 'Failed to delete order',
   'common.yes': 'Yes',
   'common.no': 'No',
-  'table.column.phone': 'Phone'
+  'table.column.phone': 'Phone',
+  'table.selectAll.allPages': 'Select All Pages',
+  'table.selectAll.clear': 'Clear All Selection',
+  'table.selected.all': 'All items selected',
+  'table.selected.count': '{count} items selected',
+  'table.operation.batchDelete': 'Batch Delete',
+  'order.batchDelete.confirm': 'Are you sure you want to delete the selected orders?',
+  'order.batchDelete.success': 'Batch deletion successful',
+  'order.batchDelete.fail': 'Batch deletion failed'
 }; 
