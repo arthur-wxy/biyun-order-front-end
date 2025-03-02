@@ -14,29 +14,18 @@ const OrderSearchForm = () => {
     const { form, expand, toggleExpand, handleReset } = useSearchForm();
     const intl = useIntl();
     const [loading, setLoading] = useState(false);
-    const [orderData, setOrderData] = useState(mockOrders);
+    const [orderData, setOrderData] = useState([]);
 
     const handleSubmit = async (values) => {
         setLoading(true);
         try {
-            // 模拟API调用延迟
-            await new Promise(resolve => setTimeout(resolve, 500));
             // 在实际应用中，这里会调用API获取数据
-            // const response = await dispatch(fetchOrders(values));
-            // setOrderData(response.payload);
-            
-            // 这里我们使用mock数据进行过滤
-            const filteredOrders = mockOrders.filter(order => {
-                if (values.orderNo && !order.orderNo.includes(values.orderNo)) {
-                    return false;
-                }
-                if (values.status && order.status !== values.status) {
-                    return false;
-                }
-                // 可以添加更多过滤条件
-                return true;
-            });
-            setOrderData(filteredOrders);
+            const response = await dispatch(fetchOrders(values));
+            if (response.payload) {
+                setOrderData(response.payload);
+            }
+        } catch (error) {
+            console.error('Search failed:', error);
         } finally {
             setLoading(false);
         }
