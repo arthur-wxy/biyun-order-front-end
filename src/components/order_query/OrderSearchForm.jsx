@@ -15,11 +15,11 @@ const OrderSearchForm = () => {
     const intl = useIntl();
     const [loading, setLoading] = useState(false);
     const [orderData, setOrderData] = useState([]);
+    const [searchValues, setSearchValues] = useState(null);
 
-    const handleSubmit = async (values) => {
+    const fetchData = async (values) => {
         setLoading(true);
         try {
-            // 在实际应用中，这里会调用API获取数据
             const response = await dispatch(fetchOrders(values));
             if (response.payload) {
                 setOrderData(response.payload);
@@ -28,6 +28,17 @@ const OrderSearchForm = () => {
             console.error('Search failed:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleSubmit = async (values) => {
+        setSearchValues(values);
+        await fetchData(values);
+    };
+
+    const handleRefresh = () => {
+        if (searchValues) {
+            fetchData(searchValues);
         }
     };
 
@@ -64,6 +75,7 @@ const OrderSearchForm = () => {
                 <OrderTable 
                     data={orderData}
                     loading={loading}
+                    onRefresh={handleRefresh}
                 />
             </Card>
         </div>

@@ -42,6 +42,7 @@ export default {
   'table.column.operation': 'Operation',
   'table.operation.view': 'View',
   'table.operation.edit': 'Edit',
+  'table.operation.delete': 'Delete',
   'table.pagination.total': 'Total {total} records',
 
   'common.footer': '©2024 Created by Your Company',
@@ -60,5 +61,16 @@ export default {
   'error.notFound': 'Resource Not Found',
   'error.serverError': 'Server Error',
   'error.network': 'Network Connection Error',
-  'error.unknown': 'Unknown Error'
+  'error.unknown': 'Unknown Error',
+
+  'order.edit.title': 'Edit Order',
+  'order.edit.required': 'This field is required',
+  'order.edit.success': 'Order updated successfully',
+  'order.edit.fail': 'Failed to update order',
+  'order.delete.confirm': 'Are you sure you want to delete this order?',
+  'order.delete.success': 'Order deleted successfully',
+  'order.delete.fail': 'Failed to delete order',
+  'common.yes': 'Yes',
+  'common.no': 'No',
+  'table.column.phone': 'Phone'
 }; 

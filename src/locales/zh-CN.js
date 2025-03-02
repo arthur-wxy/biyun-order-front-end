@@ -42,6 +42,7 @@ export default {
   'table.column.operation': '操作',
   'table.operation.view': '查看',
   'table.operation.edit': '编辑',
+  'table.operation.delete': '删除',
   'table.pagination.total': '共 {total} 条记录',
 
   'common.footer': '©2024 Created by Your Company',
@@ -60,5 +61,16 @@ export default {
   'error.notFound': '资源未找到',
   'error.serverError': '服务器错误',
   'error.network': '网络连接错误',
-  'error.unknown': '未知错误'
+  'error.unknown': '未知错误',
+
+  'order.edit.title': '编辑订单',
+  'order.edit.required': '此字段为必填项',
+  'order.edit.success': '订单更新成功',
+  'order.edit.fail': '订单更新失败',
+  'order.delete.confirm': '确定要删除此订单吗？',
+  'order.delete.success': '订单删除成功',
+  'order.delete.fail': '订单删除失败',
+  'common.yes': '确定',
+  'common.no': '取消',
+  'table.column.phone': '联系电话'
 }; 

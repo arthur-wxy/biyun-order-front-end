@@ -1,7 +1,8 @@
-import { Space, Tag, Button, Image } from 'antd';
+import { Space, Tag, Button, Image, Popconfirm } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import React from 'react';
 
-export const getOrderColumns = (intl) => [
+export const getOrderColumns = (intl, { onEdit, onDelete, refreshData, handleDelete }) => [
     {
         title: intl.formatMessage({ id: 'table.column.orderNo' }),
         dataIndex: 'orderNo',
@@ -111,12 +112,27 @@ export const getOrderColumns = (intl) => [
         width: 120,
         render: (_, record) => (
             <Space size="middle">
-                <Button type="link" size="small">
-                    {intl.formatMessage({ id: 'table.operation.view' })}
-                </Button>
-                <Button type="link" size="small">
+                <Button
+                    type="link"
+                    icon={<EditOutlined />}
+                    onClick={() => onEdit(record)}
+                >
                     {intl.formatMessage({ id: 'table.operation.edit' })}
                 </Button>
+                <Popconfirm
+                    title={intl.formatMessage({ id: 'order.delete.confirm' })}
+                    onConfirm={() => handleDelete(record)}
+                    okText={intl.formatMessage({ id: 'common.yes' })}
+                    cancelText={intl.formatMessage({ id: 'common.no' })}
+                >
+                    <Button
+                        type="link"
+                        danger
+                        icon={<DeleteOutlined />}
+                    >
+                        {intl.formatMessage({ id: 'table.operation.delete' })}
+                    </Button>
+                </Popconfirm>
             </Space>
         ),
     },
