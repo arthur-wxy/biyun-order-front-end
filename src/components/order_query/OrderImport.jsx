@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { InboxOutlined } from '@ant-design/icons';
-import { message, Upload, Form, Select, Progress, Card, Space } from 'antd';
+import { InboxOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { message, Upload, Form, Select, Progress, Card, Space, Typography } from 'antd';
 import { useInternalApi } from '../../network/internalApi';
 import { useIntl } from 'react-intl';
 import OrderTable from './OrderTable';
@@ -8,6 +8,7 @@ import { mockOrders } from '../../mock/orderData';
 
 const { Dragger } = Upload;
 const { Option } = Select;
+const { Text } = Typography;
 
 // 配置开关
 const DEBUG = false; // 设置为 true 时使用 mock 数据，false 时使用真实接口
@@ -177,6 +178,16 @@ const OrderImport = () => {
           <Form.Item 
             label={intl.formatMessage({ id: 'order.import.type' })}
             style={{ marginBottom: 24 }}
+            extra={
+              <Text type="secondary">
+                <InfoCircleOutlined style={{ marginRight: 4 }} />
+                {intl.formatMessage({ 
+                  id: importType === 'ORDER' 
+                    ? 'order.import.type.order.hint' 
+                    : 'order.import.type.product.hint' 
+                })}
+              </Text>
+            }
           >
             <Select
               value={importType}

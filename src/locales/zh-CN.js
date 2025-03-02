@@ -29,6 +29,8 @@ export default {
   'order.import.fail': '文件上传失败',
   'order.import.uploading': '正在上传...',
   'order.import.preview': '导入预览',
+  'order.import.type.order.hint': '请上传订单导入模板文件，包含订单号、商品信息、收件人等信息',
+  'order.import.type.product.hint': '请上传商品导入模板文件，包含商品名称、SKU、价格等信息',
 
   'table.column.orderNo': '订单号',
   'table.column.productInfo': '商品信息',

@@ -29,6 +29,8 @@ export default {
   'order.import.fail': 'File upload failed',
   'order.import.uploading': 'Uploading...',
   'order.import.preview': 'Import Preview',
+  'order.import.type.order.hint': 'Please upload order import template file containing order number, product information, recipient, etc.',
+  'order.import.type.product.hint': 'Please upload product import template file containing product name, SKU, price, etc.',
 
   'table.column.orderNo': 'Order No.',
   'table.column.productInfo': 'Product Info',
