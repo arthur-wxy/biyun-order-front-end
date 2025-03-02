@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Image } from 'antd';
 
 export const HeaderContainer = styled.div`
-  padding: ${({ collapsed }) => collapsed ? '8px' : '16px'};
+  padding: ${({ $collapsed }) => $collapsed ? '8px' : '16px'};
   background: ${({ theme }) => theme.siderHeaderBg || 'rgba(255, 255, 255, 0.1)'};
   transition: all 0.3s;
   display: flex;
@@ -18,7 +18,7 @@ export const HeaderContainer = styled.div`
 export const StyledImage = styled(Image)`
   width: 100%;
   height: auto;
-  max-width: ${({ collapsed }) => collapsed ? '32px' : '200px'};
+  max-width: ${({ $collapsed }) => $collapsed ? '32px' : '200px'};
   transition: all 0.3s;
   
   &:hover {

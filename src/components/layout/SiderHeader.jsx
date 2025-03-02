@@ -26,7 +26,7 @@ const SiderHeader = memo(({
 
   return (
     <HeaderContainer 
-      collapsed={collapsed}
+      $collapsed={collapsed}
       className={className}
       theme={theme}
     >
@@ -43,7 +43,7 @@ const SiderHeader = memo(({
         }
         onClick={handleClick}
         onError={handleError}
-        collapsed={collapsed}
+        $collapsed={collapsed}
         loading="lazy"
       />
     </HeaderContainer>

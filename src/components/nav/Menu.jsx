@@ -4,9 +4,56 @@ import { Link, useLocation } from 'react-router-dom';
 import { useMenu } from './hooks/useMenu';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import { preloadRoute } from '../../routes';
 
 // 添加样式来控制菜单项在收缩状态下的显示
 const StyledMenu = styled(Menu)`
+  // 基础样式
+  &.ant-menu {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  // 菜单项样式
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    color: rgba(255, 255, 255, 0.85) !important;
+
+    &:hover {
+      color: #fff !important;
+    }
+
+    .ant-menu-title-content {
+      a {
+        color: rgba(255, 255, 255, 0.85) !important;
+        &:hover {
+          color: #fff !important;
+        }
+      }
+    }
+  }
+
+  // 选中状态
+  .ant-menu-item-selected {
+    background-color: #1890ff !important;
+    
+    .ant-menu-title-content {
+      a {
+        color: #fff !important;
+      }
+    }
+  }
+
+  // 子菜单样式
+  .ant-menu-sub {
+    background: transparent !important;
+    
+    .ant-menu-item {
+      background: transparent !important;
+    }
+  }
+
+  // 收缩状态样式
   &.ant-menu-inline-collapsed {
     .ant-menu-item,
     .ant-menu-submenu-title {
@@ -32,16 +79,7 @@ const StyledMenu = styled(Menu)`
         margin-inline-end: 0;
       }
     }
-  }
 
-  // 确保子菜单背景色与父容器一致
-  &.ant-menu-inline-collapsed,
-  .ant-menu-sub.ant-menu-inline {
-    background: transparent;
-  }
-
-  // 控制收缩时显示第一个字符
-  &.ant-menu-inline-collapsed {
     .ant-menu-item .ant-menu-title-content,
     .ant-menu-submenu-title .ant-menu-title-content {
       opacity: 1;
@@ -62,6 +100,7 @@ const StyledMenu = styled(Menu)`
           position: absolute;
           left: 50%;
           transform: translateX(-50%);
+          color: rgba(255, 255, 255, 0.85);
         }
 
         & > span {
@@ -76,11 +115,19 @@ const renderMenuItem = (item, intl) => {
   const label = intl.formatMessage({ id: item.label });
   const firstLetter = label.charAt(0);
 
+  // 处理鼠标悬停事件
+  const handleMouseEnter = () => {
+    if (item.path) {
+      preloadRoute(item.path);
+    }
+  };
+
   if (item.children) {
     return {
       key: item.key,
       label: <span data-first-letter={firstLetter}><span>{label}</span></span>,
-      children: item.children.map(child => renderMenuItem(child, intl))
+      children: item.children.map(child => renderMenuItem(child, intl)),
+      onMouseEnter: handleMouseEnter
     };
   }
 
@@ -92,7 +139,8 @@ const renderMenuItem = (item, intl) => {
       </Link>
     ) : (
       <span data-first-letter={firstLetter}><span>{label}</span></span>
-    )
+    ),
+    onMouseEnter: handleMouseEnter
   };
 };
 
