@@ -5,6 +5,7 @@ export default {
   'menu.order_import': '订单导入',
   'menu.bill_manage': '账单管理',
   'menu.logistics_manage': '物流管理',
+  'menu.login': '登录',
 
   'order.search.orderNo': '订单号',
   'order.search.externalOrderNo': '外部订单号',
@@ -82,5 +83,16 @@ export default {
   'table.operation.batchDelete': '批量删除',
   'order.batchDelete.confirm': '确定要删除选中的订单吗？',
   'order.batchDelete.success': '批量删除成功',
-  'order.batchDelete.fail': '批量删除失败'
+  'order.batchDelete.fail': '批量删除失败',
+
+  'login.title': '系统登录',
+  'login.username.placeholder': '请输入用户名',
+  'login.password.placeholder': '请输入密码',
+  'login.username.required': '请输入用户名',
+  'login.password.required': '请输入密码',
+  'login.button': '登录',
+  'login.success': '登录成功',
+  'login.error': '用户名或密码错误',
+  'login.network.error': '登录失败，请稍后重试',
+  'login.expired': '登录已过期，请重新登录'
 }; 

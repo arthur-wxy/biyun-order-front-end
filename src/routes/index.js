@@ -1,4 +1,5 @@
-import { lazy } from 'react';
+import React, { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 
 // 创建可预加载的懒加载组件
 const createLazyComponent = (factory) => {
@@ -16,6 +17,10 @@ const OrderImport = createLazyComponent(() =>
   import(/* webpackPrefetch: true */ '../components/order_query/OrderImport')
 );
 
+const Login = createLazyComponent(() => 
+  import(/* webpackPrefetch: true */ '../pages/Login')
+);
+
 // 预加载单个路由组件
 const preloadComponent = (route) => {
   if (route.element?.type?.preload) {
@@ -30,20 +35,38 @@ const preloadChildRoutes = (route) => {
   }
 };
 
+// 路由守卫组件
+const PrivateRoute = ({ element }) => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return element;
+};
+
 export const routes = [
   {
+    path: '/login',
+    element: <Login />,
+    title: 'menu.login'
+  },
+  {
+    path: '/',
+    element: <Navigate to="/summary" replace />,
+  },
+  {
     path: '/summary',
-    element: <div>Summary</div>,
+    element: <PrivateRoute element={<div>Summary</div>} />,
     title: 'menu.summary'
   },
   {
     path: '/order_query', 
-    element: <OrderSearchForm />,
+    element: <PrivateRoute element={<OrderSearchForm />} />,
     title: 'menu.order_query'
   },
   {
     path: '/order_import',
-    element: <OrderImport />,
+    element: <PrivateRoute element={<OrderImport />} />,
     title: 'menu.order_import'
   }
 ];

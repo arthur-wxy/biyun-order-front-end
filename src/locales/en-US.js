@@ -5,6 +5,7 @@ export default {
   'menu.order_import': 'Order Import',
   'menu.bill_manage': 'Bill Management',
   'menu.logistics_manage': 'Logistics Management',
+  'menu.login': 'Login',
 
   'order.search.orderNo': 'Order No.',
   'order.search.externalOrderNo': 'External Order No.',
@@ -82,5 +83,16 @@ export default {
   'table.operation.batchDelete': 'Batch Delete',
   'order.batchDelete.confirm': 'Are you sure you want to delete the selected orders?',
   'order.batchDelete.success': 'Batch deletion successful',
-  'order.batchDelete.fail': 'Batch deletion failed'
+  'order.batchDelete.fail': 'Batch deletion failed',
+
+  'login.title': 'System Login',
+  'login.username.placeholder': 'Please enter username',
+  'login.password.placeholder': 'Please enter password',
+  'login.username.required': 'Please enter username',
+  'login.password.required': 'Please enter password',
+  'login.button': 'Login',
+  'login.success': 'Login successful',
+  'login.error': 'Invalid username or password',
+  'login.network.error': 'Login failed, please try again later',
+  'login.expired': 'Login expired, please login again'
 }; 
