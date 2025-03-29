@@ -14,22 +14,33 @@ const Login = () => {
 
     const handleSubmit = async (values) => {
         try {
-            const response = await request.post('/public/login', {
-                username: values.username,
-                password: values.password
+            // 使用 URLSearchParams 构建查询字符串
+            const params = new URLSearchParams();
+            params.append('username', values.username);
+            params.append('password', values.password);
+
+            const response = await request.post(`/auth/login?${params.toString()}`, null, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
             });
 
             if (response.data.success) {
-                const { authToken } = response.data.data;
-                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('authToken', response.data.content);
                 message.success(intl.formatMessage({ id: 'login.success' }));
                 navigate('/');
             } else {
-                message.error(intl.formatMessage({ id: 'login.error' }));
+                message.error(
+                    response.data.errorMsg || 
+                    intl.formatMessage({ id: 'login.error' })
+                );
             }
         } catch (error) {
-            message.error(intl.formatMessage({ id: 'login.network.error' }));
             console.error('Login failed:', error);
+            message.error(
+                error.response?.data?.errorMsg || 
+                intl.formatMessage({ id: 'login.network.error' })
+            );
         }
     };
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const internalApi = axios.create({
     // baseURL: 'http://122.51.57.37/api/', 
-    baseURL: 'http://192.168.1.3:8080/api', 
+    baseURL: 'http://localhost:8080/api', 
     timeout: 60000,
     withCredentials: false, // 跨域请求不发送 cookies
 });
