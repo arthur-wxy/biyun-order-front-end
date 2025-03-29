@@ -86,13 +86,20 @@ export default {
   'order.batchDelete.fail': '批量删除失败',
 
   'login.title': '系统登录',
-  'login.username.placeholder': '请输入用户名',
-  'login.password.placeholder': '请输入密码',
+  'login.username.placeholder': '用户名',
+  'login.password.placeholder': '密码',
   'login.username.required': '请输入用户名',
   'login.password.required': '请输入密码',
   'login.button': '登录',
   'login.success': '登录成功',
-  'login.error': '用户名或密码错误',
-  'login.network.error': '登录失败，请稍后重试',
-  'login.expired': '登录已过期，请重新登录'
+  'login.error': '登录失败',
+  'login.network.error': '网络错误，请稍后重试',
+  'login.expired': '登录已过期，请重新登录',
+
+  // User Status
+  'user.logged': '已登录',
+  'user.not.logged': '未登录',
+  'logout.button': '注销账号',
+  'logout.success': '注销成功',
+  'logout.error': '注销失败'
 }; 

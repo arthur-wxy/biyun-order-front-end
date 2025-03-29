@@ -7,7 +7,7 @@ const createApiClient = (config) => {
     baseURL: config.BASE_URL,
     timeout: config.TIMEOUT,
     headers: { 'Content-Type': 'application/json' },
-    withCredentials: true, // 允许跨域请求携带 cookies
+    withCredentials: false, // 不需要跨域携带 cookies
   });
 
   // 请求拦截器
@@ -21,14 +21,20 @@ const createApiClient = (config) => {
       }
       
       // 添加token等认证信息
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `${token}`;
       }
+
+      // 调试日志
+      console.log('Request URL:', config.baseURL + config.url);
+      console.log('Request Method:', config.method);
+      console.log('Request Headers:', config.headers);
       
       return config;
     },
     (error) => {
+      console.error('Request Error:', error);
       return Promise.reject(error);
     }
   );
@@ -36,12 +42,23 @@ const createApiClient = (config) => {
   // 响应拦截器
   instance.interceptors.response.use(
     (response) => {
-      console.log('Response:', response); // 添加日志
-      return response.data;  // 返回完整的响应对象
+      console.log('Response Status:', response.status);
+      console.log('Response Data:', response.data);
+      return response.data;  // 返回响应数据
     },
     (error) => {
-      console.error('API Error:', error); // 添加错误日志
-      message.error(error.response?.data?.message || '请求失败');
+      console.error('API Error:', error);
+      
+      if (error.response?.status === 401) {
+        // 清除认证信息
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('username');
+        message.error('登录已过期，请重新登录');
+        window.location.href = '/login';
+      } else {
+        message.error(error.response?.data?.message || '请求失败');
+      }
+      
       return Promise.reject(error);
     }
   );

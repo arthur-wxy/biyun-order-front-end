@@ -3,12 +3,11 @@ import { Table, message, Alert, Button, Popconfirm } from 'antd';
 import { useIntl } from 'react-intl';
 import { getOrderColumns } from './config/tableColumns';
 import EditOrderModal from './components/EditOrderModal';
-import { useInternalApi } from '../../network/internalApi';
+import { internalApi } from '../../network/apiClient';
 import { DeleteOutlined } from '@ant-design/icons';
 
 const OrderTable = ({ data, loading, onRefresh }) => {
     const intl = useIntl();
-    const api = useInternalApi();
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [currentRecord, setCurrentRecord] = useState(null);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -27,15 +26,15 @@ const OrderTable = ({ data, loading, onRefresh }) => {
 
     const handleDelete = async (record) => {
         try {
-            const response = await api.post('/delete', {
+            const response = await internalApi.post('/delete', {
                 orderNo: record.orderNo
             });
 
-            if (response.data?.success) {
+            if (response.success) {
                 message.success(intl.formatMessage({ id: 'order.delete.success' }));
                 onRefresh();
             } else {
-                throw new Error(response.data?.message || 'Delete failed');
+                throw new Error(response.message || 'Delete failed');
             }
         } catch (error) {
             message.error(error.message || intl.formatMessage({ id: 'order.delete.fail' }));
@@ -44,17 +43,17 @@ const OrderTable = ({ data, loading, onRefresh }) => {
 
     const handleBatchDelete = async () => {
         try {
-            const response = await api.post('/batchDelete', {
+            const response = await internalApi.post('/batchDelete', {
                 orderNos: isSelectAll ? 'all' : selectedRowKeys
             });
 
-            if (response.data?.success) {
+            if (response.success) {
                 message.success(intl.formatMessage({ id: 'order.batchDelete.success' }));
                 setSelectedRowKeys([]);
                 setIsSelectAll(false);
                 onRefresh();
             } else {
-                throw new Error(response.data?.message || 'Batch delete failed');
+                throw new Error(response.message || 'Batch delete failed');
             }
         } catch (error) {
             message.error(error.message || intl.formatMessage({ id: 'order.batchDelete.fail' }));

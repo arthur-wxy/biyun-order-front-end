@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { useInternalApi } from '../../network/internalApi';
+import { internalApi } from '../../network/apiClient';
 
 export const fetchOrders = createAsyncThunk(
   'order/fetchOrders',
   async (params) => {
-    const api = useInternalApi();
-    const response = await api.get('/orders', { params });
-    return response.data;
+    const response = await internalApi.get('/orders', { params });
+    return response;
   }
 );
 

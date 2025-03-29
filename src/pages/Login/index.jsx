@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import request from '../../utils/request';
 import styles from './index.module.less';
 import loginBg from '../../assets/images/login-bg.png';
+import Header from '../../components/Header';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -14,7 +15,6 @@ const Login = () => {
 
     const handleSubmit = async (values) => {
         try {
-            // 使用 URLSearchParams 构建查询字符串
             const params = new URLSearchParams();
             params.append('username', values.username);
             params.append('password', values.password);
@@ -22,11 +22,13 @@ const Login = () => {
             const response = await request.post(`/auth/login?${params.toString()}`, null, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
                 }
             });
 
             if (response.data.success) {
                 localStorage.setItem('authToken', response.data.content);
+                localStorage.setItem('username', values.username);
                 message.success(intl.formatMessage({ id: 'login.success' }));
                 navigate('/');
             } else {
@@ -46,6 +48,10 @@ const Login = () => {
 
     return (
         <div className={styles.loginContainer}>
+            <Header>
+                {/* 这里放置语言切换组件 */}
+                {/* 假设语言切换组件是通过父组件传入的 */}
+            </Header>
             <div className={styles.leftSection}>
                 <img 
                     src={loginBg} 

@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useInternalApi } from '../../../network/internalApi';
-import { ENDPOINTS, DEFAULT_MENU_CONFIG } from '../../../network/config';
+import { useState } from 'react';
+import { DEFAULT_MENU_CONFIG } from '../../../network/config';
 
 // 转换菜单数据的函数
 const transformMenuData = (menuData) => {

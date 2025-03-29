@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { Modal, Form, Input, Select, InputNumber, message } from 'antd';
 import { useIntl } from 'react-intl';
-import { useInternalApi } from '../../../network/internalApi';
+import { internalApi } from '../../../network/apiClient';
 
 const EditOrderModal = ({ visible, onCancel, onSuccess, initialValues }) => {
     const [form] = Form.useForm();
     const intl = useIntl();
-    const api = useInternalApi();
 
     useEffect(() => {
         if (visible && initialValues) {
@@ -29,16 +28,16 @@ const EditOrderModal = ({ visible, onCancel, onSuccess, initialValues }) => {
             }
 
             // 发送更新请求
-            const response = await api.post('/updateSingle', {
+            const response = await internalApi.post('/updateSingle', {
                 ...values,
                 orderNo: initialValues.orderNo // 保证订单号不变
             });
 
-            if (response.data?.success) {
+            if (response.success) {
                 message.success(intl.formatMessage({ id: 'order.edit.success' }));
                 onSuccess();
             } else {
-                throw new Error(response.data?.message || 'Update failed');
+                throw new Error(response.message || 'Update failed');
             }
         } catch (error) {
             message.error(error.message || intl.formatMessage({ id: 'order.edit.fail' }));

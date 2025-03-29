@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { InboxOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { message, Upload, Form, Select, Progress, Card, Space, Typography } from 'antd';
-import { useInternalApi } from '../../network/internalApi';
+import { internalApi } from '../../network/apiClient';
 import { useIntl } from 'react-intl';
 import OrderTable from './OrderTable';
 import { mockOrders } from '../../mock/orderData';
@@ -24,7 +24,6 @@ const OrderImport = () => {
   const [uploadStatus, setUploadStatus] = useState('normal'); // 'normal', 'active', 'success', 'exception'
   const [showTable, setShowTable] = useState(false);
   const [importedData, setImportedData] = useState([]);
-  const api = useInternalApi();
   const intl = useIntl();
 
   // 添加数据转换函数
@@ -78,12 +77,11 @@ const OrderImport = () => {
       } else {
         // 生产模式：使用真实接口
         const formData = new FormData();
-        formData.append('importFile', file);  // 直接使用文件对象
+        formData.append('importFile', file);
         formData.append('type', importType);
 
         // 添加日志查看请求配置
-        const baseURL = api.instance.defaults.baseURL;
-        console.log('Request URL:', baseURL + '/excel');
+        console.log('Request URL:', internalApi.defaults.baseURL + '/excel');
         console.log('FormData:', {
           file: file.name,
           type: importType,
@@ -96,9 +94,9 @@ const OrderImport = () => {
           console.log('FormData entry:', pair[0], pair[1]);
         }
 
-        const response = await api.post('/excel', formData, {
+        const response = await internalApi.post('/excel', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary' + Math.random().toString(36).substring(2)
+            'Content-Type': 'multipart/form-data'
           },
           onUploadProgress: (progressEvent) => {
             const progress = Math.round(
@@ -108,18 +106,17 @@ const OrderImport = () => {
           }
         });
 
-        if (response.data?.success) {
+        if (response.success) {
           setUploadStatus('success');
           message.success(intl.formatMessage({ id: 'order.import.success' }));
           
-          // 转换并使用接口返回的数据
-          if (response.data?.content) {
-            const transformedData = transformOrderData(response.data.content);
+          if (response.content) {
+            const transformedData = transformOrderData(response.content);
             setImportedData(transformedData);
             setShowTable(true);
           }
         } else {
-          throw new Error(response.data?.message || 'Upload failed');
+          throw new Error(response.message || 'Upload failed');
         }
       }
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select, DatePicker, Card, Row, Col, Space } from 'antd';
 import { useIntl } from 'react-intl';
-import { useInternalApi } from '../../network/internalApi';
+import { internalApi } from '../../network/apiClient';
 import OrderTable from './OrderTable';
 import { searchFields } from './constants';
 import dayjs from 'dayjs';
@@ -11,7 +11,6 @@ const { RangePicker } = DatePicker;
 const OrderSearchForm = () => {
     const [form] = Form.useForm();
     const intl = useIntl();
-    const api = useInternalApi();
     const [loading, setLoading] = useState(false);
     const [orderData, setOrderData] = useState([]);
     const [pagination, setPagination] = useState({
@@ -50,10 +49,10 @@ const OrderSearchForm = () => {
                 ...restParams
             };
 
-            const response = await api.get('/query.json', { params: queryParams });
+            const response = await internalApi.get('/query.json', { params: queryParams });
 
-            if (response.data?.success) {
-                const { content, total } = response.data;
+            if (response.success) {
+                const { content, total } = response;
                 setOrderData(transformOrderData(content));
                 setPagination(prev => ({
                     ...prev,
