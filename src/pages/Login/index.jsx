@@ -19,7 +19,7 @@ const Login = () => {
             params.append('username', values.username);
             params.append('password', values.password);
 
-            const response = await request.post(`/auth/login?${params.toString()}`, null, {
+            const response = await request.post(`/user/login?${params.toString()}`, null, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept': 'application/json'

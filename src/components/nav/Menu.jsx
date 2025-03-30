@@ -112,7 +112,7 @@ const StyledMenu = styled(Menu)`
 `;
 
 const renderMenuItem = (item, intl) => {
-  const label = intl.formatMessage({ id: item.label });
+  const label = intl.formatMessage({ id: item.label }) || item.label;
   const firstLetter = label.charAt(0);
 
   // 处理鼠标悬停事件
@@ -146,9 +146,17 @@ const renderMenuItem = (item, intl) => {
 
 const AppMenu = () => {
   const location = useLocation();
-  const { menuItems, loading } = useMenu();
+  const { menuItems, loading, error } = useMenu();
   const intl = useIntl();
   
+  console.log('菜单项:', menuItems);
+  
+  // 如果出错，显示错误信息
+  if (error) {
+    console.error('加载菜单出错:', error);
+  }
+  
+  // 处理菜单项
   const processedItems = menuItems.map(item => renderMenuItem(item, intl));
 
   return (
@@ -158,13 +166,16 @@ const AppMenu = () => {
           <Spin size="small" />
         </div>
       )}
-      <StyledMenu
-        theme="dark"
-        mode="inline"
-        selectedKeys={[location.pathname]}
-        defaultOpenKeys={['order_manage']}
-        items={processedItems}
-      />
+      
+      {!loading && (
+        <StyledMenu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          defaultOpenKeys={['logistics_manage']} // 默认展开物流管理
+          items={processedItems}
+        />
+      )}
     </>
   );
 };

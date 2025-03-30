@@ -14,7 +14,7 @@ const UserStatus = () => {
 
     const handleLogout = async () => {
         try {
-            await request.post('/auth/logout');
+            await request.post('/user/logout');
             localStorage.removeItem('authToken');
             localStorage.removeItem('username');
             message.success(intl.formatMessage({ id: 'logout.success' }));
