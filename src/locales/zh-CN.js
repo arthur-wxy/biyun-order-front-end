@@ -1,11 +1,18 @@
-export default {
-  'menu.summary': '数据总览',
+const zhCN = {
+  'menu.summary': '首页',
   'menu.order_manage': '订单管理',
   'menu.order_query': '订单查询',
   'menu.order_import': '订单导入',
   'menu.bill_manage': '账单管理',
   'menu.logistics_manage': '物流管理',
   'menu.login': '登录',
+  'menu.quotation': '报价管理',
+
+  'menu.order_manage_order_query': '订单查询',
+  'menu.order_manage_order_import': '订单导入',
+
+  'menu.logistics_manage_tracking': '物流跟踪',
+  'menu.logistics_manage_settings': '物流设置',
 
   'order.search.orderNo': '订单号',
   'order.search.externalOrderNo': '外部订单号',
@@ -101,5 +108,56 @@ export default {
   'user.not.logged': '未登录',
   'logout.button': '注销账号',
   'logout.success': '注销成功',
-  'logout.error': '注销失败'
-}; 
+  'logout.error': '注销失败',
+
+  // 报价单模块
+  'quotation.title': '报价单',
+  'quotation.edit.title': '编辑报价单',
+  'quotation.edit.success': '报价单更新成功',
+  'quotation.edit.fail': '报价单更新失败',
+  'quotation.delete.confirm': '确定要删除该报价单吗？',
+  'quotation.delete.success': '报价单删除成功',
+  'quotation.delete.fail': '报价单删除失败',
+  'quotation.batchDelete.confirm': '确定要删除选中的报价单吗？',
+  'quotation.batchDelete.success': '批量删除成功',
+  'quotation.batchDelete.fail': '批量删除失败',
+  'quotation.add.success': '报价单添加成功',
+  'quotation.add.title': '添加报价单',
+  'quotation.sku.placeholder': '请输入SKU',
+
+  // 报价单字段
+  'quotation.column.sku': 'SKU',
+  'quotation.column.productName': '产品名称',
+  'quotation.column.purchaseCost': '采买成本',
+  'quotation.column.shippingCost': '运费成本',
+  'quotation.column.surcharge': '附加费',
+  'quotation.column.premiumRate': '溢价率',
+  'quotation.column.exchangeRate': '汇率',
+  'quotation.column.grossProfit': '毛利',
+  'quotation.column.grossProfitRate': '毛利润率',
+  'quotation.column.actualWeight': '商品重量',
+  'quotation.add.button': '添加一行',
+
+  // 报价单筛选
+  'quotation.search.id': '报价单ID',
+  'quotation.search.sku': 'SKU',
+  'quotation.search.productName': '商品名称',
+  'quotation.search.region': '区域',
+  'quotation.search.submit': '搜索',
+  'quotation.search.reset': '重置',
+
+  // Summary 页面
+  'summary.total_orders': '总订单数',
+  'summary.pending_orders': '待处理订单',
+  'summary.total_quotations': '总报价单数',
+  'summary.active_quotations': '活跃报价单',
+  'summary.today_orders': '今日订单',
+  'summary.today_amount': '今日金额',
+  'summary.month_orders': '本月订单',
+  'summary.month_amount': '本月金额',
+  
+  // 表单验证
+  'form.required': '此字段为必填项',
+};
+
+export default zhCN; 

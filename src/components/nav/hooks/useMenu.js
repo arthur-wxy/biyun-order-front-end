@@ -50,26 +50,38 @@ export const useMenu = () => {
   const transformMenuData = (menuData) => {
     if (!menuData || !Array.isArray(menuData)) return DEFAULT_MENU_CONFIG;
     
-    return menuData.map(item => {
-      const menuItem = {
-        key: item.key,
-        label: item.label,
-        path: item.link || `/${item.key}`, // 使用link或根据key创建路径
-        icon: item.icon
+    const normalizeKey = (key) => {
+      // 移除开头和结尾的斜杠
+      let normalizedKey = key.replace(/^\/+|\/+$/g, '');
+      // 将所有斜杠和特殊字符替换为下划线
+      normalizedKey = normalizedKey.replace(/[/\s-]+/g, '_');
+      return normalizedKey;
+    };
+
+    const processMenuItem = (item) => {
+      const normalizedKey = normalizeKey(item.key);
+      
+      return {
+        key: normalizedKey,
+        label: `menu.${normalizedKey}`,
+        path: item.link || `/${normalizedKey}`,
+        icon: item.icon,
+        ...(item.children && Array.isArray(item.children) && {
+          children: item.children.map(child => {
+            const normalizedChildKey = normalizeKey(child.key);
+            // 使用子菜单自己的 link 或 key 作为路径，不再与父菜单拼接
+            return {
+              key: normalizedChildKey,
+              label: `menu.${normalizedChildKey}`,
+              path: child.link || `/${normalizedChildKey}`,
+              icon: child.icon
+            };
+          })
+        })
       };
+    };
 
-      // 处理子菜单
-      if (item.children && Array.isArray(item.children)) {
-        menuItem.children = item.children.map(child => ({
-          key: child.key,
-          label: child.label,
-          path: child.link || `/${item.key}/${child.key}`,
-          icon: child.icon
-        }));
-      }
-
-      return menuItem;
-    });
+    return menuData.map(processMenuItem);
   };
 
   return { 

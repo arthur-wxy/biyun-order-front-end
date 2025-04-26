@@ -56,10 +56,10 @@ export const StyledContent = styled(Content)`
   min-height: calc(100vh - 64px);
   background: #fff;
   transition: margin-left 0.2s;
+  overflow-y: auto;
 `;
 
 export const ContentWrapper = styled.div`
-  padding: 24px;
   background: #fff;
   border-radius: 4px;
   min-height: 100%;

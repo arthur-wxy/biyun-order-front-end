@@ -18,13 +18,28 @@ export const ENDPOINTS = {
 // 默认菜单配置，用于加载失败时的回退
 export const DEFAULT_MENU_CONFIG = [
   {
-    key: '/summary',
-    label: '首页',
+    key: 'summary',
+    label: 'menu.summary',
     path: '/summary'
   },
   {
-    key: '/order_query',
-    label: '订单查询',
+    key: 'order_query',
+    label: 'menu.order_query',
     path: '/order_query'
+  },
+  {
+    key: 'order_import',
+    label: 'menu.order_import',
+    path: '/order_import'
+  },
+  {
+    key: 'quotation',
+    label: 'menu.quotation',
+    path: '/quotation'
+  },
+  {
+    key: 'bill_manage',
+    label: 'menu.bill_manage',
+    path: '/bill_manage'
   }
 ]; 

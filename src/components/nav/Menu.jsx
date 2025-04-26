@@ -1,10 +1,11 @@
 import React from 'react';
 import { Menu, Spin } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useMenu } from './hooks/useMenu';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { preloadRoute } from '../../routes';
+import logger from '@/utils/logger';
 
 // 添加样式来控制菜单项在收缩状态下的显示
 const StyledMenu = styled(Menu)`
@@ -111,15 +112,35 @@ const StyledMenu = styled(Menu)`
   }
 `;
 
+// 防抖函数
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+// 创建一个防抖版本的预加载函数
+const debouncedPreload = debounce((path) => {
+  if (path) {
+    logger('MENU', 'preload', `Preloading route for menu item: ${path}`);
+    preloadRoute(path);
+  }
+}, 300); // 300ms 的防抖时间
+
+// 创建一个记忆化的渲染菜单项函数
 const renderMenuItem = (item, intl) => {
   const label = intl.formatMessage({ id: item.label }) || item.label;
   const firstLetter = label.charAt(0);
 
-  // 处理鼠标悬停事件
+  // 处理鼠标悬停事件，使用普通函数
   const handleMouseEnter = () => {
-    if (item.path) {
-      preloadRoute(item.path);
-    }
+    debouncedPreload(item.path);
   };
 
   if (item.children) {
@@ -145,9 +166,17 @@ const renderMenuItem = (item, intl) => {
 };
 
 const AppMenu = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { menuItems, loading, error } = useMenu();
   const intl = useIntl();
+  
+  React.useEffect(() => {
+    logger('MENU', 'mount', 'Menu component mounted');
+    return () => {
+      logger('MENU', 'unmount', 'Menu component unmounting');
+    };
+  }, []);
   
   console.log('菜单项:', menuItems);
   
@@ -158,6 +187,16 @@ const AppMenu = () => {
   
   // 处理菜单项
   const processedItems = menuItems.map(item => renderMenuItem(item, intl));
+
+  const handleMenuClick = (info) => {
+    logger('MENU', 'action', 'Menu item clicked', { key: info.key });
+    navigate(info.key);
+  };
+
+  logger('MENU', 'render', 'Rendering menu component', {
+    currentPath: location.pathname,
+    itemCount: processedItems.length
+  });
 
   return (
     <>
@@ -174,6 +213,7 @@ const AppMenu = () => {
           selectedKeys={[location.pathname]}
           defaultOpenKeys={['logistics_manage']} // 默认展开物流管理
           items={processedItems}
+          onClick={handleMenuClick}
         />
       )}
     </>

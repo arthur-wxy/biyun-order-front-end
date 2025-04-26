@@ -1,11 +1,18 @@
-export default {
-  'menu.summary': 'Summary',
+const enUS = {
+  'menu.summary': 'Home',
   'menu.order_manage': 'Order Management',
   'menu.order_query': 'Order Query',
   'menu.order_import': 'Order Import',
   'menu.bill_manage': 'Bill Management',
   'menu.logistics_manage': 'Logistics Management',
   'menu.login': 'Login',
+  'menu.quotation': 'Quotation Management',
+
+  'menu.order_manage_order_query': 'Order Query',
+  'menu.order_manage_order_import': 'Order Import',
+
+  'menu.logistics_manage_tracking': 'Logistics Tracking',
+  'menu.logistics_manage_settings': 'Logistics Settings',
 
   'order.search.orderNo': 'Order No.',
   'order.search.externalOrderNo': 'External Order No.',
@@ -94,5 +101,60 @@ export default {
   'login.success': 'Login successful',
   'login.error': 'Invalid username or password',
   'login.network.error': 'Login failed, please try again later',
-  'login.expired': 'Login expired, please login again'
-}; 
+  'login.expired': 'Login expired, please login again',
+
+  'user.logged': 'Logged In',
+  'user.not.logged': 'Not Logged In',
+  'logout.button': 'Logout',
+  'logout.success': 'Logout successful',
+  'logout.error': 'Logout failed',
+
+  'quotation.title': 'Quotation',
+  'quotation.edit.title': 'Edit Quotation',
+  'quotation.edit.success': 'Quotation updated successfully',
+  'quotation.edit.fail': 'Failed to update quotation',
+  'quotation.delete.confirm': 'Are you sure you want to delete this quotation?',
+  'quotation.delete.success': 'Quotation deleted successfully',
+  'quotation.delete.fail': 'Failed to delete quotation',
+  'quotation.batchDelete.confirm': 'Are you sure you want to delete the selected quotations?',
+  'quotation.batchDelete.success': 'Batch deletion successful',
+  'quotation.batchDelete.fail': 'Failed to batch delete',
+  'quotation.add.success': 'Quotation added successfully',
+  'quotation.add.title': 'Add Quotation',
+  'quotation.sku.placeholder': 'Please enter SKU',
+
+  'quotation.column.sku': 'SKU',
+  'quotation.column.productName': 'Product Name',
+  'quotation.column.purchaseCost': 'Purchase Cost',
+  'quotation.column.shippingCost': 'Shipping Cost',
+  'quotation.column.surcharge': 'Surcharge',
+  'quotation.column.premiumRate': 'Premium Rate',
+  'quotation.column.exchangeRate': 'Exchange Rate',
+  'quotation.column.grossProfit': 'Gross Profit',
+  'quotation.column.grossProfitRate': 'Gross Profit Rate',
+  'quotation.column.actualWeight': 'Product Weight',
+  'quotation.add.button': 'Add Row',
+
+  // Quotation Search
+  'quotation.search.id': 'Quotation ID',
+  'quotation.search.sku': 'SKU',
+  'quotation.search.productName': 'Product Name',
+  'quotation.search.region': 'Region',
+  'quotation.search.submit': 'Search',
+  'quotation.search.reset': 'Reset',
+
+  // Summary page
+  'summary.total_orders': 'Total Orders',
+  'summary.pending_orders': 'Pending Orders',
+  'summary.total_quotations': 'Total Quotations',
+  'summary.active_quotations': 'Active Quotations',
+  'summary.today_orders': 'Today\'s Orders',
+  'summary.today_amount': 'Today\'s Amount',
+  'summary.month_orders': 'Monthly Orders',
+  'summary.month_amount': 'Monthly Amount',
+  
+  // Form validation
+  'form.required': 'This field is required',
+};
+
+export default enUS; 

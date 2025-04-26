@@ -1,9 +1,6 @@
-import React, { useState, useCallback, Suspense } from 'react';
-import { Button, Space, Spin } from 'antd';
+import React, { useState, useCallback } from 'react';
+import { Button, Space } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Routes, Route } from 'react-router-dom';
-import { useLocale } from '../../hooks/useLocale';
-import { routes } from '../../routes';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../styles/theme';
 import { GlobalStyles } from '../../styles/GlobalStyles';
@@ -18,6 +15,8 @@ import {
   InnerLayout,
   HeaderRight
 } from './styles/Layout.styles';
+import { useLocation } from 'react-router-dom';
+import logger from '@/utils/logger';
 
 const SIDER_WIDTH = 200;
 const COLLAPSED_WIDTH = 80;
@@ -30,15 +29,42 @@ const getDefaultLogo = (collapsed) => (
   />
 );
 
-const MainLayout = ({ logo, menu }) => {
+const MainLayout = ({ logo, menu, children, onLocaleChange, locale }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const { toggleLocale, locale } = useLocale();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    logger('LAYOUT', 'mount', 'MainLayout component mounted');
+    return () => {
+      logger('LAYOUT', 'unmount', 'MainLayout component unmounting');
+    };
+  }, []);
+
+  React.useEffect(() => {
+    logger('LAYOUT', 'route', 'Route changed', { path: location.pathname });
+  }, [location.pathname]);
 
   const handleCollapse = useCallback((value) => {
     setCollapsed(value);
+    logger('LAYOUT', 'action', 'Sider collapsed state changed', { collapsed: value });
   }, []);
 
+  const handleLocaleToggle = useCallback(() => {
+    const newLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN';
+    onLocaleChange?.(newLocale);
+    logger('LAYOUT', 'action', 'Language toggled', { from: locale, to: newLocale });
+  }, [locale, onLocaleChange]);
+
   const siderWidth = collapsed ? COLLAPSED_WIDTH : SIDER_WIDTH;
+
+  logger('LAYOUT', 'render', 'Rendering main layout', {
+    path: location.pathname,
+    collapsed,
+    locale
+  });
+  logger('LAYOUT', 'render', 'Rendering main layout', {
+    content:children
+  })
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -60,16 +86,16 @@ const MainLayout = ({ logo, menu }) => {
             <Button
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={() => handleCollapse(!collapsed)}
               className="trigger"
             />
             <HeaderRight>
               <Space align="center">
                 <Button
                   icon={<GlobalOutlined />}
-                  onClick={toggleLocale}
+                  onClick={handleLocaleToggle}
                 >
-                  {locale.startsWith('zh') ? 'English' : '中文'}
+                  {locale === 'zh-CN' ? 'English' : '中文'}
                 </Button>
                 <UserStatus />
               </Space>
@@ -77,17 +103,7 @@ const MainLayout = ({ logo, menu }) => {
           </StyledHeader>
           <StyledContent>
             <ContentWrapper>
-              <Suspense fallback={<div style={{ textAlign: 'center', padding: '50px' }}><Spin size="large" /></div>}>
-                <Routes>
-                  {routes.map(route => (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={route.element}
-                    />
-                  ))}
-                </Routes>
-              </Suspense>
+              {children}
             </ContentWrapper>
           </StyledContent>
         </InnerLayout>

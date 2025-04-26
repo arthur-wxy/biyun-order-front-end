@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import enUS from 'antd/locale/en_US';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { store } from './store';
 import App from './App';
 import { LocaleProvider, LocaleContext } from './contexts/LocaleContext';
@@ -36,12 +35,10 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <LocaleProvider>
-        <Router>
-          <ThemeProvider theme={lightTheme}>
-            <GlobalStyles />
-            <AntConfigWrapper />
-          </ThemeProvider>
-        </Router>
+        <ThemeProvider theme={lightTheme}>
+          <GlobalStyles />
+          <AntConfigWrapper />
+        </ThemeProvider>
       </LocaleProvider>
     </Provider>
   </React.StrictMode>
