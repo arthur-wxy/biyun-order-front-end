@@ -1,8 +1,9 @@
-import React from 'react';
-import { Form, Input, Button, Row, Col, Space } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, Row, Col, Space, Select } from 'antd';
 import { useIntl } from 'react-intl';
 import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { internalApi } from '../../network/apiClient';
 
 const StyledForm = styled(Form)`
   .ant-form-item {
@@ -17,10 +18,55 @@ const StyledButton = styled(Button)`
 const QuotationSearchForm = ({ onSearch, loading }) => {
   const intl = useIntl();
   const [form] = Form.useForm();
+  const [skuOptions, setSkuOptions] = useState([]);
+  const [productNameOptions, setProductNameOptions] = useState([]);
+  const [skuSearchValue, setSkuSearchValue] = useState('');
+  const [productNameSearchValue, setProductNameSearchValue] = useState('');
+
+  // 组件加载时获取 SKU 和产品名称列表
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        // 获取 SKU 列表
+        const skuResponse = await internalApi.get('/quotationManagement/getAllSkus.json');
+        if (skuResponse.success) {
+          setSkuOptions(skuResponse.content.map(sku => ({ value: sku, label: sku })));
+        }
+
+        // 获取产品名称列表
+        const productNameResponse = await internalApi.get('/quotationManagement/getAllProductNames.json');
+        if (productNameResponse.success) {
+          setProductNameOptions(productNameResponse.content.map(name => ({ value: name, label: name })));
+        }
+      } catch (error) {
+        console.error('Failed to fetch options:', error);
+      }
+    };
+
+    fetchOptions();
+  }, []);
 
   const handleReset = () => {
     form.resetFields();
+    setSkuSearchValue('');
+    setProductNameSearchValue('');
     onSearch({});
+  };
+
+  // 过滤 SKU 选项
+  const filterSkuOptions = (input) => {
+    const searchValue = input.toLowerCase();
+    return skuOptions.filter(option => 
+      option.label.toLowerCase().includes(searchValue)
+    );
+  };
+
+  // 过滤产品名称选项
+  const filterProductNameOptions = (input) => {
+    const searchValue = input.toLowerCase();
+    return productNameOptions.filter(option => 
+      option.label.toLowerCase().includes(searchValue)
+    );
   };
 
   return (
@@ -32,38 +78,28 @@ const QuotationSearchForm = ({ onSearch, loading }) => {
     >
       <Row gutter={8} style={{ width: '100%', margin: 0 }}>
         <Col>
-          <Form.Item name="quotation_id" style={{ margin: 0 }}>
-            <Input
-              placeholder={intl.formatMessage({ id: 'quotation.search.id' })}
-              allowClear
-              style={{ width: 120 }}
-            />
-          </Form.Item>
-        </Col>
-        <Col>
           <Form.Item name="sku" style={{ margin: 0 }}>
-            <Input
+            <Select
+              showSearch
               placeholder={intl.formatMessage({ id: 'quotation.search.sku' })}
+              style={{ width: 200 }}
+              options={filterSkuOptions(skuSearchValue)}
+              onSearch={setSkuSearchValue}
+              filterOption={false}
               allowClear
-              style={{ width: 120 }}
             />
           </Form.Item>
         </Col>
         <Col>
           <Form.Item name="product_name" style={{ margin: 0 }}>
-            <Input
+            <Select
+              showSearch
               placeholder={intl.formatMessage({ id: 'quotation.search.productName' })}
+              style={{ width: 200 }}
+              options={filterProductNameOptions(productNameSearchValue)}
+              onSearch={setProductNameSearchValue}
+              filterOption={false}
               allowClear
-              style={{ width: 180 }}
-            />
-          </Form.Item>
-        </Col>
-        <Col>
-          <Form.Item name="region_code" style={{ margin: 0 }}>
-            <Input
-              placeholder={intl.formatMessage({ id: 'quotation.search.region' })}
-              allowClear
-              style={{ width: 120 }}
             />
           </Form.Item>
         </Col>

@@ -122,9 +122,12 @@ const enUS = {
   'quotation.add.success': 'Quotation added successfully',
   'quotation.add.title': 'Add Quotation',
   'quotation.sku.placeholder': 'Please enter SKU',
+  'quotation.config.title': 'Quotation Product Configuration',
 
   'quotation.column.sku': 'SKU',
   'quotation.column.productName': 'Product Name',
+  'quotation.column.regionCode': 'Region Code',
+  'quotation.column.productPrice': 'Product Price',
   'quotation.column.purchaseCost': 'Purchase Cost',
   'quotation.column.shippingCost': 'Shipping Cost',
   'quotation.column.surcharge': 'Surcharge',
@@ -133,6 +136,11 @@ const enUS = {
   'quotation.column.grossProfit': 'Gross Profit',
   'quotation.column.grossProfitRate': 'Gross Profit Rate',
   'quotation.column.actualWeight': 'Product Weight',
+  'quotation.column.estimatedProcessingTime': 'Estimated Processing Time',
+  'quotation.column.shippingLine': 'Shipping Line',
+  'quotation.column.shippingTimeDesc': 'Shipping Time Description',
+  'quotation.column.currency': 'Currency',
+  'quotation.column.remark': 'Remark',
   'quotation.add.button': 'Add Row',
 
   // Quotation Search
@@ -155,6 +163,7 @@ const enUS = {
   
   // Form validation
   'form.required': 'This field is required',
+  'form.number.required': 'Please enter a number',
 };
 
 export default enUS; 

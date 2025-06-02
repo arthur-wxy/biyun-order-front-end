@@ -94,13 +94,53 @@ const QuotationTable = () => {
         }
     };
 
-    const handleEditSuccess = (updatedRecord) => {
-        setData(data.map(item => 
-            item.sku === updatedRecord.sku ? updatedRecord : item
-        ));
-        setEditModalVisible(false);
-        setCurrentRecord(null);
-        message.success(intl.formatMessage({ id: 'quotation.edit.success' }));
+    const handleEditSuccess = async (updatedRecord) => {
+        try {
+            setLoading(true);
+            
+            // 从当前记录中获取 quotationId
+            const currentQuotation = data.find(item => item.sku === updatedRecord.sku);
+            if (!currentQuotation) {
+                message.error(intl.formatMessage({ id: 'quotation.edit.fail' }));
+                return;
+            }
+
+            // 准备请求参数，符合 QuotationFusionVO 格式
+            const params = {
+                quotationId: currentQuotation.quotationId,
+                sku: updatedRecord.sku,
+                productName: updatedRecord.productName,
+                regionCode: updatedRecord.regionCode,
+                productPrice: updatedRecord.productPrice,
+                shippingCost: updatedRecord.shippingCost,
+                estimatedProcessingTime: updatedRecord.estimatedProcessingTime,
+                shippingLine: updatedRecord.shippingLine,
+                shippingTimeDesc: updatedRecord.shippingTimeDesc,
+                currency: updatedRecord.currency,
+                actualWeight: updatedRecord.actualWeight,
+                quotationConfigVOList: updatedRecord.quotationConfigVOList
+            };
+
+            // 调用更新接口
+            const response = await internalApi.post('/quotationManagement/updateQuotation.json', params);
+
+            if (response.success) {
+                // 更新本地数据
+                setData(data.map(item => 
+                    item.quotationId === currentQuotation.quotationId ? { ...item, ...updatedRecord } : item
+                ));
+                setEditModalVisible(false);
+                setCurrentRecord(null);
+                message.success(intl.formatMessage({ id: 'quotation.edit.success' }));
+            } else {
+                message.error(response.message || intl.formatMessage({ id: 'quotation.edit.fail' }));
+            }
+        } catch (error) {
+            console.error('Failed to update quotation:', error);
+            message.error(intl.formatMessage({ id: 'quotation.edit.fail' }));
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleAddSuccess = (newRecord) => {
@@ -112,6 +152,97 @@ const QuotationTable = () => {
     // 处理搜索
     const handleSearch = (values) => {
         fetchQuotations(values);
+    };
+
+    // 子表格列配置
+    const expandedRowRender = (record) => {
+        const columns = [
+            {
+                title: intl.formatMessage({ id: 'quotation.column.regionCode' }),
+                dataIndex: 'regionCode',
+                key: 'regionCode',
+                width: 100,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.purchaseCost' }),
+                dataIndex: 'purchaseCost',
+                key: 'purchaseCost',
+                width: 120,
+                align: 'right',
+                render: (value) => `¥${Number(value).toFixed(2)}`,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.shippingCost' }),
+                dataIndex: 'shippingCost',
+                key: 'shippingCost',
+                width: 120,
+                align: 'right',
+                render: (value) => `¥${Number(value).toFixed(2)}`,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.surcharge' }),
+                dataIndex: 'surcharge',
+                key: 'surcharge',
+                width: 120,
+                align: 'right',
+                render: (value) => `¥${Number(value).toFixed(2)}`,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.premiumRate' }),
+                dataIndex: 'premiumRate',
+                key: 'premiumRate',
+                width: 120,
+                align: 'right',
+                render: (value) => `${Number(value).toFixed(2)}%`,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.exchangeRate' }),
+                dataIndex: 'exchangeRate',
+                key: 'exchangeRate',
+                width: 120,
+                align: 'right',
+                render: (value) => Number(value).toFixed(4),
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.grossProfit' }),
+                dataIndex: 'grossProfit',
+                key: 'grossProfit',
+                width: 120,
+                align: 'right',
+                render: (value) => `¥${Number(value).toFixed(2)}`,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.grossProfitRate' }),
+                dataIndex: 'grossProfitRate',
+                key: 'grossProfitRate',
+                width: 120,
+                align: 'right',
+                render: (value) => `${Number(value).toFixed(2)}%`,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.actualWeight' }),
+                dataIndex: 'actualWeight',
+                key: 'actualWeight',
+                width: 120,
+                align: 'right',
+                render: (value) => value ? `${Number(value).toFixed(2)}kg` : '-',
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.remark' }),
+                dataIndex: 'remark',
+                key: 'remark',
+                width: 200,
+            },
+        ];
+
+        return (
+            <Table
+                columns={columns}
+                dataSource={record.quotationConfigVOList}
+                pagination={false}
+                rowKey="id"
+            />
+        );
     };
 
     const columns = [
@@ -128,7 +259,13 @@ const QuotationTable = () => {
             width: 200,
         },
         {
-            title: intl.formatMessage({ id: 'quotation.column.purchaseCost' }),
+            title: intl.formatMessage({ id: 'quotation.column.regionCode' }),
+            dataIndex: 'regionCode',
+            key: 'regionCode',
+            width: 100,
+        },
+        {
+            title: intl.formatMessage({ id: 'quotation.column.productPrice' }),
             dataIndex: 'productPrice',
             key: 'productPrice',
             width: 120,
@@ -144,52 +281,36 @@ const QuotationTable = () => {
             render: (value) => `¥${Number(value).toFixed(2)}`,
         },
         {
-            title: intl.formatMessage({ id: 'quotation.column.surcharge' }),
-            dataIndex: 'surcharge',
-            key: 'surcharge',
+            title: intl.formatMessage({ id: 'quotation.column.estimatedProcessingTime' }),
+            dataIndex: 'estimatedProcessingTime',
+            key: 'estimatedProcessingTime',
             width: 120,
-            align: 'right',
-            render: (value) => `¥${Number(value).toFixed(2)}`,
         },
         {
-            title: intl.formatMessage({ id: 'quotation.column.premiumRate' }),
-            dataIndex: 'premium_rate',
-            key: 'premium_rate',
-            width: 120,
-            align: 'right',
-            render: (value) => `${Number(value).toFixed(2)}%`,
+            title: intl.formatMessage({ id: 'quotation.column.shippingLine' }),
+            dataIndex: 'shippingLine',
+            key: 'shippingLine',
+            width: 150,
         },
         {
-            title: intl.formatMessage({ id: 'quotation.column.exchangeRate' }),
-            dataIndex: 'exchange_rate',
-            key: 'exchange_rate',
-            width: 120,
-            align: 'right',
-            render: (value) => Number(value).toFixed(4),
+            title: intl.formatMessage({ id: 'quotation.column.shippingTimeDesc' }),
+            dataIndex: 'shippingTimeDesc',
+            key: 'shippingTimeDesc',
+            width: 150,
         },
         {
-            title: intl.formatMessage({ id: 'quotation.column.grossProfit' }),
-            dataIndex: 'gross_profit',
-            key: 'gross_profit',
-            width: 120,
-            align: 'right',
-            render: (value) => `¥${Number(value).toFixed(2)}`,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.grossProfitRate' }),
-            dataIndex: 'gross_profit_rate',
-            key: 'gross_profit_rate',
-            width: 120,
-            align: 'right',
-            render: (value) => `${Number(value).toFixed(2)}%`,
+            title: intl.formatMessage({ id: 'quotation.column.currency' }),
+            dataIndex: 'currency',
+            key: 'currency',
+            width: 100,
         },
         {
             title: intl.formatMessage({ id: 'quotation.column.actualWeight' }),
-            dataIndex: 'actual_weight',
-            key: 'actual_weight',
+            dataIndex: 'actualWeight',
+            key: 'actualWeight',
             width: 120,
             align: 'right',
-            render: (value) => `${Number(value).toFixed(2)}kg`,
+            render: (value) => value ? `${Number(value).toFixed(2)}kg` : '-',
         },
         {
             title: intl.formatMessage({ id: 'table.column.operation' }),
@@ -205,20 +326,6 @@ const QuotationTable = () => {
                     >
                         {intl.formatMessage({ id: 'table.operation.edit' })}
                     </Button>
-                    <Popconfirm
-                        title={intl.formatMessage({ id: 'quotation.delete.confirm' })}
-                        onConfirm={() => handleDelete(record)}
-                        okText={intl.formatMessage({ id: 'common.yes' })}
-                        cancelText={intl.formatMessage({ id: 'common.no' })}
-                    >
-                        <Button
-                            type="link"
-                            danger
-                            icon={<DeleteOutlined />}
-                        >
-                            {intl.formatMessage({ id: 'table.operation.delete' })}
-                        </Button>
-                    </Popconfirm>
                 </Space>
             ),
         },
@@ -280,8 +387,12 @@ const QuotationTable = () => {
                 columns={columns}
                 dataSource={data}
                 loading={loading}
-                rowKey="sku"
+                rowKey="quotationId"
                 scroll={{ x: 1800 }}
+                expandable={{
+                    expandedRowRender,
+                    rowExpandable: record => record.quotationConfigVOList && record.quotationConfigVOList.length > 0,
+                }}
                 pagination={{
                     showSizeChanger: true,
                     showQuickJumper: true,

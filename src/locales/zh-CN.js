@@ -124,10 +124,13 @@ const zhCN = {
   'quotation.add.success': '报价单添加成功',
   'quotation.add.title': '添加报价单',
   'quotation.sku.placeholder': '请输入SKU',
+  'quotation.config.title': '报价商品配置',
 
   // 报价单字段
   'quotation.column.sku': 'SKU',
   'quotation.column.productName': '产品名称',
+  'quotation.column.regionCode': '区域代码',
+  'quotation.column.productPrice': '产品价格',
   'quotation.column.purchaseCost': '采买成本',
   'quotation.column.shippingCost': '运费成本',
   'quotation.column.surcharge': '附加费',
@@ -136,6 +139,11 @@ const zhCN = {
   'quotation.column.grossProfit': '毛利',
   'quotation.column.grossProfitRate': '毛利润率',
   'quotation.column.actualWeight': '商品重量',
+  'quotation.column.estimatedProcessingTime': '预计处理时间',
+  'quotation.column.shippingLine': '物流线路',
+  'quotation.column.shippingTimeDesc': '物流时间描述',
+  'quotation.column.currency': '货币',
+  'quotation.column.remark': '备注',
   'quotation.add.button': '添加一行',
 
   // 报价单筛选
@@ -158,6 +166,7 @@ const zhCN = {
   
   // 表单验证
   'form.required': '此字段为必填项',
+  'form.number.required': '请输入数字',
 };
 
 export default zhCN; 
