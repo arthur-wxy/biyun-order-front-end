@@ -125,6 +125,13 @@ const zhCN = {
   'quotation.add.title': '添加报价单',
   'quotation.sku.placeholder': '请输入SKU',
   'quotation.config.title': '报价商品配置',
+  'quotation.config.add': '添加配置',
+  'quotation.config.remove': '删除配置',
+  'quotation.edit.title': '编辑报价',
+  'quotation.edit.fail': '编辑失败',
+  'quotation.edit.success': '编辑成功',
+  'common.cancel': '取消',
+  'common.save': '保存',
 
   // 报价单字段
   'quotation.column.sku': 'SKU',
@@ -145,6 +152,8 @@ const zhCN = {
   'quotation.column.currency': '货币',
   'quotation.column.remark': '备注',
   'quotation.add.button': '添加一行',
+  'quotation.column.shippingFees': '运费',
+  'quotation.column.totalCost': '总成本',
 
   // 报价单筛选
   'quotation.search.id': '报价单ID',

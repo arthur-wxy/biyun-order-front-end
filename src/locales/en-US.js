@@ -123,6 +123,8 @@ const enUS = {
   'quotation.add.title': 'Add Quotation',
   'quotation.sku.placeholder': 'Please enter SKU',
   'quotation.config.title': 'Quotation Product Configuration',
+  'quotation.config.add': 'Add Configuration',
+  'quotation.config.remove': 'Remove Configuration',
 
   'quotation.column.sku': 'SKU',
   'quotation.column.productName': 'Product Name',
@@ -164,6 +166,11 @@ const enUS = {
   // Form validation
   'form.required': 'This field is required',
   'form.number.required': 'Please enter a number',
+
+  'quotation.column.shippingFees': 'Shipping Fees',
+  'quotation.column.totalCost': 'Total Cost',
+  'common.cancel': 'Cancel',
+  'common.save': 'Save',
 };
 
 export default enUS; 

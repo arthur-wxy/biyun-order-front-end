@@ -53,6 +53,7 @@ const QuotationTable = () => {
     };
 
     const handleEdit = (record) => {
+        console.log('handleEdit record:', record);
         setCurrentRecord(record);
         setEditModalVisible(true);
     };
@@ -162,6 +163,7 @@ const QuotationTable = () => {
                 dataIndex: 'regionCode',
                 key: 'regionCode',
                 width: 100,
+                fixed: 'left',
             },
             {
                 title: intl.formatMessage({ id: 'quotation.column.purchaseCost' }),
@@ -220,12 +222,44 @@ const QuotationTable = () => {
                 render: (value) => `${Number(value).toFixed(2)}%`,
             },
             {
-                title: intl.formatMessage({ id: 'quotation.column.actualWeight' }),
-                dataIndex: 'actualWeight',
-                key: 'actualWeight',
+                title: intl.formatMessage({ id: 'quotation.column.currency' }),
+                dataIndex: 'currency',
+                key: 'currency',
+                width: 100,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.estimatedProcessingTime' }),
+                dataIndex: 'estimatedProcessingTime',
+                key: 'estimatedProcessingTime',
+                width: 120,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.shippingLine' }),
+                dataIndex: 'shippingLine',
+                key: 'shippingLine',
+                width: 150,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.shippingTimeDesc' }),
+                dataIndex: 'shippingTimeDesc',
+                key: 'shippingTimeDesc',
+                width: 150,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.shippingFees' }),
+                dataIndex: 'shippingFees',
+                key: 'shippingFees',
                 width: 120,
                 align: 'right',
-                render: (value) => value ? `${Number(value).toFixed(2)}kg` : '-',
+                render: (value) => `¥${Number(value).toFixed(2)}`,
+            },
+            {
+                title: intl.formatMessage({ id: 'quotation.column.totalCost' }),
+                dataIndex: 'totalCost',
+                key: 'totalCost',
+                width: 120,
+                align: 'right',
+                render: (value) => `¥${Number(value).toFixed(2)}`,
             },
             {
                 title: intl.formatMessage({ id: 'quotation.column.remark' }),
@@ -236,12 +270,16 @@ const QuotationTable = () => {
         ];
 
         return (
-            <Table
-                columns={columns}
-                dataSource={record.quotationConfigVOList}
-                pagination={false}
-                rowKey="id"
-            />
+            <div style={{ overflowX: 'auto' }}>
+                <Table
+                    columns={columns}
+                    dataSource={record.quotationConfigVOList}
+                    pagination={false}
+                    rowKey="id"
+                    scroll={{ x: 2000 }}
+                    size="small"
+                />
+            </div>
         );
     };
 
@@ -257,52 +295,6 @@ const QuotationTable = () => {
             dataIndex: 'productName',
             key: 'productName',
             width: 200,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.regionCode' }),
-            dataIndex: 'regionCode',
-            key: 'regionCode',
-            width: 100,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.productPrice' }),
-            dataIndex: 'productPrice',
-            key: 'productPrice',
-            width: 120,
-            align: 'right',
-            render: (value) => `¥${Number(value).toFixed(2)}`,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.shippingCost' }),
-            dataIndex: 'shippingCost',
-            key: 'shippingCost',
-            width: 120,
-            align: 'right',
-            render: (value) => `¥${Number(value).toFixed(2)}`,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.estimatedProcessingTime' }),
-            dataIndex: 'estimatedProcessingTime',
-            key: 'estimatedProcessingTime',
-            width: 120,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.shippingLine' }),
-            dataIndex: 'shippingLine',
-            key: 'shippingLine',
-            width: 150,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.shippingTimeDesc' }),
-            dataIndex: 'shippingTimeDesc',
-            key: 'shippingTimeDesc',
-            width: 150,
-        },
-        {
-            title: intl.formatMessage({ id: 'quotation.column.currency' }),
-            dataIndex: 'currency',
-            key: 'currency',
-            width: 100,
         },
         {
             title: intl.formatMessage({ id: 'quotation.column.actualWeight' }),
@@ -388,7 +380,6 @@ const QuotationTable = () => {
                 dataSource={data}
                 loading={loading}
                 rowKey="quotationId"
-                scroll={{ x: 1800 }}
                 expandable={{
                     expandedRowRender,
                     rowExpandable: record => record.quotationConfigVOList && record.quotationConfigVOList.length > 0,
@@ -402,6 +393,7 @@ const QuotationTable = () => {
                             { total }
                         ),
                 }}
+                scroll={{ x: 'max-content' }}
             />
 
             <EditQuotationModal
