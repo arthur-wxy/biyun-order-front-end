@@ -47,9 +47,24 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
         }
     };
 
-    // 数字校验规则
+    // 数字校验规则（必填）
     const numberRules = [
         { required: true, message: intl.formatMessage({ id: 'form.required' }) },
+        {
+            validator: (_, value) => {
+                if (value === undefined || value === null || value === '') {
+                    return Promise.resolve();
+                }
+                if (isNaN(Number(value))) {
+                    return Promise.reject(intl.formatMessage({ id: 'form.number.required' }));
+                }
+                return Promise.resolve();
+            }
+        }
+    ];
+
+    // 数字校验规则（非必填）
+    const optionalNumberRules = [
         {
             validator: (_, value) => {
                 if (value === undefined || value === null || value === '') {
@@ -151,7 +166,7 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                     {...restField}
                                                     name={[name, 'productPrice']}
                                                     label={intl.formatMessage({ id: 'quotation.column.productPrice' })}
-                                                    rules={numberRules}
+                                                    rules={optionalNumberRules}
                                                 >
                                                     <InputNumber
                                                         style={{ width: '100%' }}
@@ -318,7 +333,7 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                     {...restField}
                                                     name={[name, 'shippingFees']}
                                                     label={intl.formatMessage({ id: 'quotation.column.shippingFees' })}
-                                                    rules={numberRules}
+                                                    rules={optionalNumberRules}
                                                 >
                                                     <InputNumber
                                                         style={{ width: '100%' }}

@@ -136,6 +136,10 @@ const QuotationTable = () => {
                     quotationConfigVOList: updatedRecord.quotationConfigVOList
                 };
 
+                params.quotationConfigVOList.forEach(item => {
+                    item.quotationId = currentQuotation.quotationId;
+                });
+
                 const response = await internalApi.post('/quotationManagement/updateQuotation.json', params);
 
                 if (response.success) {
