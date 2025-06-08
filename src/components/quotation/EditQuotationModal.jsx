@@ -20,7 +20,11 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
             const formValues = {
                 ...initialValues,
                 quotationConfigVOList: Array.isArray(initialValues.quotationConfigVOList) 
-                    ? initialValues.quotationConfigVOList 
+                    ? initialValues.quotationConfigVOList.map(config => ({
+                        ...config,
+                        premiumRate: config.premiumRate ? config.premiumRate * 100 : undefined,
+                        grossProfitRate: config.grossProfitRate ? config.grossProfitRate * 100 : undefined
+                    }))
                     : []
             };
             console.log('Setting form values:', formValues);
@@ -36,6 +40,16 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
             setLoading(true);
             const values = await form.validateFields();
             console.log('Form submitted with values:', values);
+
+            // 转换溢价率和毛利润率为小数形式
+            if (values.quotationConfigVOList) {
+                values.quotationConfigVOList = values.quotationConfigVOList.map(config => ({
+                    ...config,
+                    premiumRate: config.premiumRate ? config.premiumRate / 100 : undefined,
+                    grossProfitRate: config.grossProfitRate ? config.grossProfitRate / 100 : undefined
+                }));
+            }
+
             await onSuccess(values);
             message.success(intl.formatMessage({ id: isAddMode ? 'quotation.add.success' : 'quotation.edit.success' }));
             onCancel();
