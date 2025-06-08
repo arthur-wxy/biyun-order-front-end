@@ -3,7 +3,6 @@ import { Table, Button, Space, Popconfirm, message, Alert } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 import EditQuotationModal from './EditQuotationModal';
-import AddQuotationModal from './AddQuotationModal';
 import QuotationSearchForm from './QuotationSearchForm';
 import { internalApi } from '../../network/apiClient';
 import { mockQuotations } from './mockData';
@@ -13,9 +12,9 @@ const QuotationTable = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState(false);
-    const [addModalVisible, setAddModalVisible] = useState(false);
     const [currentRecord, setCurrentRecord] = useState(null);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [isAddMode, setIsAddMode] = useState(false);
 
     // 初始加载数据
     useEffect(() => {
@@ -55,11 +54,14 @@ const QuotationTable = () => {
     const handleEdit = (record) => {
         console.log('handleEdit record:', record);
         setCurrentRecord(record);
+        setIsAddMode(false);
         setEditModalVisible(true);
     };
 
     const handleAdd = () => {
-        setAddModalVisible(true);
+        setCurrentRecord(null);
+        setIsAddMode(true);
+        setEditModalVisible(true);
     };
 
     const handleDelete = async (record) => {
@@ -99,55 +101,60 @@ const QuotationTable = () => {
         try {
             setLoading(true);
             
-            // 从当前记录中获取 quotationId
-            const currentQuotation = data.find(item => item.sku === updatedRecord.sku);
-            if (!currentQuotation) {
-                message.error(intl.formatMessage({ id: 'quotation.edit.fail' }));
-                return;
-            }
-
-            // 准备请求参数，符合 QuotationFusionVO 格式
-            const params = {
-                quotationId: currentQuotation.quotationId,
-                sku: updatedRecord.sku,
-                productName: updatedRecord.productName,
-                regionCode: updatedRecord.regionCode,
-                productPrice: updatedRecord.productPrice,
-                shippingCost: updatedRecord.shippingCost,
-                estimatedProcessingTime: updatedRecord.estimatedProcessingTime,
-                shippingLine: updatedRecord.shippingLine,
-                shippingTimeDesc: updatedRecord.shippingTimeDesc,
-                currency: updatedRecord.currency,
-                actualWeight: updatedRecord.actualWeight,
-                quotationConfigVOList: updatedRecord.quotationConfigVOList
-            };
-
-            // 调用更新接口
-            const response = await internalApi.post('/quotationManagement/updateQuotation.json', params);
-
-            if (response.success) {
-                // 更新本地数据
-                setData(data.map(item => 
-                    item.quotationId === currentQuotation.quotationId ? { ...item, ...updatedRecord } : item
-                ));
-                setEditModalVisible(false);
-                setCurrentRecord(null);
-                message.success(intl.formatMessage({ id: 'quotation.edit.success' }));
+            if (isAddMode) {
+                // 创建新报价单
+                const response = await internalApi.post('/quotationManagement/createQuotation.json', updatedRecord);
+                
+                if (response.success) {
+                    setData([...data, response.content]);
+                    setEditModalVisible(false);
+                    setCurrentRecord(null);
+                    message.success(intl.formatMessage({ id: 'quotation.add.success' }));
+                } else {
+                    message.error(response.message || intl.formatMessage({ id: 'quotation.add.fail' }));
+                }
             } else {
-                message.error(response.message || intl.formatMessage({ id: 'quotation.edit.fail' }));
+                // 更新现有报价单
+                const currentQuotation = data.find(item => item.sku === updatedRecord.sku);
+                if (!currentQuotation) {
+                    message.error(intl.formatMessage({ id: 'quotation.edit.fail' }));
+                    return;
+                }
+
+                const params = {
+                    quotationId: currentQuotation.quotationId,
+                    sku: updatedRecord.sku,
+                    productName: updatedRecord.productName,
+                    regionCode: updatedRecord.regionCode,
+                    productPrice: updatedRecord.productPrice,
+                    shippingCost: updatedRecord.shippingCost,
+                    estimatedProcessingTime: updatedRecord.estimatedProcessingTime,
+                    shippingLine: updatedRecord.shippingLine,
+                    shippingTimeDesc: updatedRecord.shippingTimeDesc,
+                    currency: updatedRecord.currency,
+                    actualWeight: updatedRecord.actualWeight,
+                    quotationConfigVOList: updatedRecord.quotationConfigVOList
+                };
+
+                const response = await internalApi.post('/quotationManagement/updateQuotation.json', params);
+
+                if (response.success) {
+                    setData(data.map(item => 
+                        item.quotationId === currentQuotation.quotationId ? { ...item, ...updatedRecord } : item
+                    ));
+                    setEditModalVisible(false);
+                    setCurrentRecord(null);
+                    message.success(intl.formatMessage({ id: 'quotation.edit.success' }));
+                } else {
+                    message.error(response.message || intl.formatMessage({ id: 'quotation.edit.fail' }));
+                }
             }
         } catch (error) {
             console.error('Failed to update quotation:', error);
-            message.error(intl.formatMessage({ id: 'quotation.edit.fail' }));
+            message.error(intl.formatMessage({ id: isAddMode ? 'quotation.add.fail' : 'quotation.edit.fail' }));
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleAddSuccess = (newRecord) => {
-        setData([...data, newRecord]);
-        setAddModalVisible(false);
-        message.success(intl.formatMessage({ id: 'quotation.add.success' }));
     };
 
     // 处理搜索
@@ -399,17 +406,13 @@ const QuotationTable = () => {
             <EditQuotationModal
                 visible={editModalVisible}
                 initialValues={currentRecord}
+                isAddMode={isAddMode}
                 onCancel={() => {
                     setEditModalVisible(false);
                     setCurrentRecord(null);
+                    setIsAddMode(false);
                 }}
                 onSuccess={handleEditSuccess}
-            />
-
-            <AddQuotationModal
-                visible={addModalVisible}
-                onCancel={() => setAddModalVisible(false)}
-                onSuccess={handleAddSuccess}
             />
         </>
     );

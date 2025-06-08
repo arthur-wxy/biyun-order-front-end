@@ -120,6 +120,7 @@ const enUS = {
   'quotation.batchDelete.success': 'Batch deletion successful',
   'quotation.batchDelete.fail': 'Failed to batch delete',
   'quotation.add.success': 'Quotation added successfully',
+  'quotation.add.fail': 'Failed to add quotation',
   'quotation.add.title': 'Add Quotation',
   'quotation.sku.placeholder': 'Please enter SKU',
   'quotation.config.title': 'Quotation Product Configuration',
@@ -143,6 +144,8 @@ const enUS = {
   'quotation.column.shippingTimeDesc': 'Shipping Time Description',
   'quotation.column.currency': 'Currency',
   'quotation.column.remark': 'Remark',
+  'quotation.column.shippingFees': 'Shipping Fees',
+  'quotation.column.totalCost': 'Total Cost',
   'quotation.add.button': 'Add Row',
 
   // Quotation Search
@@ -166,11 +169,11 @@ const enUS = {
   // Form validation
   'form.required': 'This field is required',
   'form.number.required': 'Please enter a number',
+  'form.validation.fail': 'Form validation failed',
 
-  'quotation.column.shippingFees': 'Shipping Fees',
-  'quotation.column.totalCost': 'Total Cost',
   'common.cancel': 'Cancel',
   'common.save': 'Save',
+  'common.add': 'Add',
 };
 
 export default enUS; 

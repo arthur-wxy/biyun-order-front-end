@@ -122,6 +122,7 @@ const zhCN = {
   'quotation.batchDelete.success': '批量删除成功',
   'quotation.batchDelete.fail': '批量删除失败',
   'quotation.add.success': '报价单添加成功',
+  'quotation.add.fail': '报价单添加失败',
   'quotation.add.title': '添加报价单',
   'quotation.sku.placeholder': '请输入SKU',
   'quotation.config.title': '报价商品配置',
@@ -132,20 +133,21 @@ const zhCN = {
   'quotation.edit.success': '编辑成功',
   'common.cancel': '取消',
   'common.save': '保存',
+  'common.add': '添加',
 
   // 报价单字段
   'quotation.column.sku': 'SKU',
   'quotation.column.productName': '产品名称',
   'quotation.column.regionCode': '区域代码',
   'quotation.column.productPrice': '产品价格',
-  'quotation.column.purchaseCost': '采买成本',
+  'quotation.column.purchaseCost': '采购成本',
   'quotation.column.shippingCost': '运费成本',
   'quotation.column.surcharge': '附加费',
   'quotation.column.premiumRate': '溢价率',
   'quotation.column.exchangeRate': '汇率',
   'quotation.column.grossProfit': '毛利',
-  'quotation.column.grossProfitRate': '毛利润率',
-  'quotation.column.actualWeight': '商品重量',
+  'quotation.column.grossProfitRate': '毛利率',
+  'quotation.column.actualWeight': '产品重量',
   'quotation.column.estimatedProcessingTime': '预计处理时间',
   'quotation.column.shippingLine': '物流线路',
   'quotation.column.shippingTimeDesc': '物流时间描述',
@@ -176,6 +178,7 @@ const zhCN = {
   // 表单验证
   'form.required': '此字段为必填项',
   'form.number.required': '请输入数字',
+  'form.validation.fail': '表单验证失败',
 };
 
 export default zhCN; 

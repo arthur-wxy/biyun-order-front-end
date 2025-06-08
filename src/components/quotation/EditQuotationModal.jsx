@@ -3,7 +3,7 @@ import { Modal, Form, Input, InputNumber, Button, Space, message, Typography, Ro
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
-const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => {
+const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuccess }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const intl = useIntl();
@@ -12,6 +12,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
         console.log('EditQuotationModal useEffect triggered:', {
             visible,
             initialValues,
+            isAddMode,
             hasQuotationConfigVOList: initialValues?.quotationConfigVOList?.length > 0
         });
 
@@ -28,7 +29,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
             console.log('Resetting form');
             form.resetFields();
         }
-    }, [visible, initialValues, form]);
+    }, [visible, initialValues, form, isAddMode]);
 
     const handleSubmit = async () => {
         try {
@@ -36,11 +37,11 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
             const values = await form.validateFields();
             console.log('Form submitted with values:', values);
             await onSuccess(values);
-            message.success(intl.formatMessage({ id: 'quotation.edit.success' }));
+            message.success(intl.formatMessage({ id: isAddMode ? 'quotation.add.success' : 'quotation.edit.success' }));
             onCancel();
         } catch (error) {
             console.error('Form submission error:', error);
-            message.error(intl.formatMessage({ id: 'quotation.edit.fail' }));
+            message.error(intl.formatMessage({ id: isAddMode ? 'quotation.add.fail' : 'quotation.edit.fail' }));
         } finally {
             setLoading(false);
         }
@@ -62,9 +63,12 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
         }
     ];
 
+    // 必填字段校验规则
+    const requiredRule = [{ required: true, message: intl.formatMessage({ id: 'form.required' }) }];
+
     return (
         <Modal
-            title={intl.formatMessage({ id: 'quotation.edit.title' })}
+            title={intl.formatMessage({ id: isAddMode ? 'quotation.add.title' : 'quotation.edit.title' })}
             open={visible}
             onCancel={onCancel}
             width={1200}
@@ -81,16 +85,16 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                         <Form.Item
                             name="sku"
                             label={intl.formatMessage({ id: 'quotation.column.sku' })}
-                            rules={[{ required: true, message: intl.formatMessage({ id: 'form.required' }) }]}
+                            rules={requiredRule}
                         >
-                            <Input disabled />
+                            <Input disabled={!isAddMode} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item
                             name="productName"
                             label={intl.formatMessage({ id: 'quotation.column.productName' })}
-                            rules={[{ required: true, message: intl.formatMessage({ id: 'form.required' }) }]}
+                            rules={requiredRule}
                         >
                             <Input />
                         </Form.Item>
@@ -102,7 +106,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                         <Form.Item
                             name="actualWeight"
                             label={intl.formatMessage({ id: 'quotation.column.actualWeight' })}
-                            rules={[{ required: true, message: intl.formatMessage({ id: 'form.required' }) }]}
+                            rules={numberRules}
                         >
                             <InputNumber
                                 style={{ width: '100%' }}
@@ -137,7 +141,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                                                     {...restField}
                                                     name={[name, 'regionCode']}
                                                     label={intl.formatMessage({ id: 'quotation.column.regionCode' })}
-                                                    rules={[{ required: true, message: intl.formatMessage({ id: 'form.required' }) }]}
+                                                    rules={requiredRule}
                                                 >
                                                     <Input />
                                                 </Form.Item>
@@ -274,6 +278,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                                                     {...restField}
                                                     name={[name, 'currency']}
                                                     label={intl.formatMessage({ id: 'quotation.column.currency' })}
+                                                    rules={requiredRule}
                                                 >
                                                     <Input />
                                                 </Form.Item>
@@ -283,6 +288,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                                                     {...restField}
                                                     name={[name, 'estimatedProcessingTime']}
                                                     label={intl.formatMessage({ id: 'quotation.column.estimatedProcessingTime' })}
+                                                    rules={requiredRule}
                                                 >
                                                     <Input />
                                                 </Form.Item>
@@ -292,6 +298,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                                                     {...restField}
                                                     name={[name, 'shippingLine']}
                                                     label={intl.formatMessage({ id: 'quotation.column.shippingLine' })}
+                                                    rules={requiredRule}
                                                 >
                                                     <Input />
                                                 </Form.Item>
@@ -301,6 +308,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                                                     {...restField}
                                                     name={[name, 'shippingTimeDesc']}
                                                     label={intl.formatMessage({ id: 'quotation.column.shippingTimeDesc' })}
+                                                    rules={requiredRule}
                                                 >
                                                     <Input />
                                                 </Form.Item>
@@ -326,7 +334,6 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                                                     {...restField}
                                                     name={[name, 'totalCost']}
                                                     label={intl.formatMessage({ id: 'quotation.column.totalCost' })}
-                                                    rules={numberRules}
                                                 >
                                                     <InputNumber
                                                         style={{ width: '100%' }}
@@ -381,7 +388,7 @@ const EditQuotationModal = ({ visible, initialValues, onCancel, onSuccess }) => 
                             {intl.formatMessage({ id: 'common.cancel' })}
                         </Button>
                         <Button type="primary" htmlType="submit" loading={loading}>
-                            {intl.formatMessage({ id: 'common.save' })}
+                            {intl.formatMessage({ id: isAddMode ? 'common.add' : 'common.save' })}
                         </Button>
                     </Space>
                 </Form.Item>
