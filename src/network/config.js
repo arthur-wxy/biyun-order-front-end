@@ -1,6 +1,7 @@
 export const API_CONFIG = {
   INTERNAL: {
-    BASE_URL: process.env.REACT_APP_INTERNAL_API_URL || 'http://localhost:8080/api/',
+    // BASE_URL: process.env.REACT_APP_INTERNAL_API_URL || 'http://localhost:8080/api/',
+    BASE_URL: process.env.REACT_APP_INTERNAL_API_URL || 'http://122.51.57.37/api/',
     TIMEOUT: 5000,
   },
   EXTERNAL: {
