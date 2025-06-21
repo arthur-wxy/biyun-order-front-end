@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DEFAULT_MENU_CONFIG } from '../../../network/config';
 
+const MENU_API_URL = process.env.REACT_APP_MENU_API_URL || 'http://localhost:8080/view';
+
 export const useMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,7 @@ export const useMenu = () => {
         console.log('正在获取菜单配置，认证令牌:', token ? '存在' : '不存在');
         
         // 发送请求获取菜单配置
-        const response = await axios.get('http://122.51.57.37/view/getMenuConf.json', {
+        const response = await axios.get(`${MENU_API_URL}/getMenuConf.json`, {
           headers: {
             'Authorization': token || ''
           }

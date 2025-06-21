@@ -2,7 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 
 const instance = axios.create({
-    baseURL: 'http://122.51.57.37',
+    baseURL: process.env.REACT_APP_INTERNAL_API_URL || 'http://localhost:8080/api',
     timeout: 10000,
 });
 
@@ -79,7 +79,7 @@ const request = {
             ...config,
             headers: {
                 ...config.headers,
-                'Authorization': `{localStorage.getItem('authToken')}`
+                'Authorization': `${localStorage.getItem('authToken')}`
             }
         });
     },

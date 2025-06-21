@@ -49,6 +49,12 @@ const OrderSearchForm = () => {
                 ...restParams
             };
 
+            // 调试信息
+            console.log('Environment variables:');
+            console.log('NODE_ENV:', process.env.NODE_ENV);
+            console.log('REACT_APP_INTERNAL_API_URL:', process.env.REACT_APP_INTERNAL_API_URL);
+            console.log('internalApi baseURL:', internalApi.defaults.baseURL);
+
             const response = await internalApi.get('/query.json', { params: queryParams });
 
             if (response.success) {

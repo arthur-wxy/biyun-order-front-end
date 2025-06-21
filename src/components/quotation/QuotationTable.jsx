@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Popconfirm, message, Alert } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, DownloadOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
+import * as XLSX from 'xlsx';
 import EditQuotationModal from './EditQuotationModal';
 import QuotationSearchForm from './QuotationSearchForm';
 import { internalApi } from '../../network/apiClient';
@@ -92,6 +93,120 @@ const QuotationTable = () => {
             message.success(intl.formatMessage({ id: 'quotation.batchDelete.success' }));
         } catch (error) {
             message.error(intl.formatMessage({ id: 'quotation.batchDelete.fail' }));
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleBatchExport = async () => {
+        try {
+            setLoading(true);
+            
+            // 获取选中的数据
+            const selectedData = data.filter(item => selectedRowKeys.includes(item.quotationId));
+            
+            if (selectedData.length === 0) {
+                message.warning(intl.formatMessage({ id: 'quotation.export.noData' }));
+                return;
+            }
+
+            // 准备导出数据
+            const exportData = [];
+            
+            selectedData.forEach(quotation => {
+                // 如果没有配置数据，只导出主表数据
+                if (!quotation.quotationConfigVOList || quotation.quotationConfigVOList.length === 0) {
+                    exportData.push({
+                        [intl.formatMessage({ id: 'quotation.column.sku' })]: quotation.sku,
+                        [intl.formatMessage({ id: 'quotation.column.productName' })]: quotation.productName,
+                        [intl.formatMessage({ id: 'quotation.column.actualWeight' })]: quotation.actualWeight ? `${quotation.actualWeight}kg` : '-',
+                        [intl.formatMessage({ id: 'quotation.column.regionCode' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.productPrice' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.purchaseCost' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.shippingCost' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.surcharge' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.premiumRate' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.exchangeRate' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.grossProfit' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.grossProfitRate' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.currency' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.estimatedProcessingTime' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.shippingLine' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.shippingTimeDesc' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.shippingFees' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.totalCost' })]: '-',
+                        [intl.formatMessage({ id: 'quotation.column.remark' })]: '-',
+                    });
+                } else {
+                    // 导出配置数据
+                    quotation.quotationConfigVOList.forEach(config => {
+                        exportData.push({
+                            [intl.formatMessage({ id: 'quotation.column.sku' })]: quotation.sku,
+                            [intl.formatMessage({ id: 'quotation.column.productName' })]: quotation.productName,
+                            [intl.formatMessage({ id: 'quotation.column.actualWeight' })]: quotation.actualWeight ? `${quotation.actualWeight}kg` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.regionCode' })]: config.regionCode || '-',
+                            [intl.formatMessage({ id: 'quotation.column.productPrice' })]: config.productPrice ? `¥${Number(config.productPrice).toFixed(2)}` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.purchaseCost' })]: config.purchaseCost ? `¥${Number(config.purchaseCost).toFixed(2)}` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.shippingCost' })]: config.shippingCost ? `¥${Number(config.shippingCost).toFixed(2)}` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.surcharge' })]: config.surcharge ? `¥${Number(config.surcharge).toFixed(2)}` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.premiumRate' })]: config.premiumRate ? `${(Number(config.premiumRate) * 100).toFixed(2)}%` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.exchangeRate' })]: config.exchangeRate ? Number(config.exchangeRate).toFixed(4) : '-',
+                            [intl.formatMessage({ id: 'quotation.column.grossProfit' })]: config.grossProfit ? `¥${Number(config.grossProfit).toFixed(2)}` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.grossProfitRate' })]: config.grossProfitRate ? `${(Number(config.grossProfitRate) * 100).toFixed(2)}%` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.currency' })]: config.currency || '-',
+                            [intl.formatMessage({ id: 'quotation.column.estimatedProcessingTime' })]: config.estimatedProcessingTime || '-',
+                            [intl.formatMessage({ id: 'quotation.column.shippingLine' })]: config.shippingLine || '-',
+                            [intl.formatMessage({ id: 'quotation.column.shippingTimeDesc' })]: config.shippingTimeDesc || '-',
+                            [intl.formatMessage({ id: 'quotation.column.shippingFees' })]: config.shippingFees ? `¥${Number(config.shippingFees).toFixed(2)}` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.totalCost' })]: config.totalCost ? `¥${Number(config.totalCost).toFixed(2)}` : '-',
+                            [intl.formatMessage({ id: 'quotation.column.remark' })]: config.remark || '-',
+                        });
+                    });
+                }
+            });
+
+            // 创建工作簿
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+            // 设置列宽
+            const columnWidths = [
+                { wch: 15 }, // SKU
+                { wch: 25 }, // Product Name
+                { wch: 12 }, // Actual Weight
+                { wch: 12 }, // Region Code
+                { wch: 15 }, // Product Price
+                { wch: 15 }, // Purchase Cost
+                { wch: 15 }, // Shipping Cost
+                { wch: 12 }, // Surcharge
+                { wch: 12 }, // Premium Rate
+                { wch: 12 }, // Exchange Rate
+                { wch: 15 }, // Gross Profit
+                { wch: 15 }, // Gross Profit Rate
+                { wch: 10 }, // Currency
+                { wch: 20 }, // Estimated Processing Time
+                { wch: 15 }, // Shipping Line
+                { wch: 20 }, // Shipping Time Desc
+                { wch: 15 }, // Shipping Fees
+                { wch: 15 }, // Total Cost
+                { wch: 30 }, // Remark
+            ];
+            worksheet['!cols'] = columnWidths;
+
+            // 添加工作表到工作簿
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Quotations');
+
+            // 生成文件名
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            const fileName = `quotations_export_${timestamp}.xlsx`;
+
+            // 下载文件
+            XLSX.writeFile(workbook, fileName);
+            
+            message.success(intl.formatMessage({ id: 'quotation.batchExport.success' }));
+        } catch (error) {
+            console.error('Export error:', error);
+            message.error(intl.formatMessage({ id: 'quotation.batchExport.fail' }));
         } finally {
             setLoading(false);
         }
@@ -363,6 +478,14 @@ const QuotationTable = () => {
                                 { id: 'table.selected.count' },
                                 { count: selectedRowKeys.length }
                             )}
+                            <Button
+                                type="link"
+                                icon={<DownloadOutlined />}
+                                onClick={handleBatchExport}
+                                loading={loading}
+                            >
+                                {intl.formatMessage({ id: 'table.operation.batchExport' })}
+                            </Button>
                             <Popconfirm
                                 title={intl.formatMessage({ id: 'quotation.batchDelete.confirm' })}
                                 onConfirm={handleBatchDelete}
