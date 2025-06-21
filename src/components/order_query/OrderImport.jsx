@@ -24,6 +24,7 @@ const OrderImport = () => {
   const [uploadStatus, setUploadStatus] = useState('normal'); // 'normal', 'active', 'success', 'exception'
   const [showTable, setShowTable] = useState(false);
   const [importedData, setImportedData] = useState([]);
+  const [rawImportedData, setRawImportedData] = useState([]); // 保存原始导入数据
   const intl = useIntl();
 
   // 添加数据转换函数
@@ -72,6 +73,7 @@ const OrderImport = () => {
         message.success(intl.formatMessage({ id: 'order.import.success' }));
         
         // 使用 mock 数据
+        setRawImportedData(mockOrders.slice(0, 10)); // 保存原始数据
         setImportedData(mockOrders.slice(0, 10));
         setShowTable(true);
       } else {
@@ -111,6 +113,7 @@ const OrderImport = () => {
           message.success(intl.formatMessage({ id: 'order.import.success' }));
           
           if (response.content) {
+            setRawImportedData(response.content); // 保存原始数据
             const transformedData = transformOrderData(response.content);
             setImportedData(transformedData);
             setShowTable(true);
@@ -165,6 +168,7 @@ const OrderImport = () => {
       setUploadStatus('normal');
       setShowTable(false);
       setImportedData([]);
+      setRawImportedData([]); // 清除原始数据
     }
   };
 
@@ -226,6 +230,7 @@ const OrderImport = () => {
         <Card title={intl.formatMessage({ id: 'order.import.preview' })}>
           <OrderTable 
             data={importedData}
+            rawData={rawImportedData} // 传递原始数据
             loading={false}
           />
         </Card>

@@ -13,6 +13,7 @@ const OrderSearchForm = () => {
     const intl = useIntl();
     const [loading, setLoading] = useState(false);
     const [orderData, setOrderData] = useState([]);
+    const [rawOrderData, setRawOrderData] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
@@ -59,6 +60,7 @@ const OrderSearchForm = () => {
 
             if (response.success) {
                 const { content, total } = response;
+                setRawOrderData(content);
                 setOrderData(transformOrderData(content));
                 setPagination(prev => ({
                     ...prev,
@@ -164,6 +166,7 @@ const OrderSearchForm = () => {
             <Card>
                 <OrderTable 
                     data={orderData}
+                    rawData={rawOrderData}
                     loading={loading}
                     onRefresh={handleRefresh}
                     pagination={{

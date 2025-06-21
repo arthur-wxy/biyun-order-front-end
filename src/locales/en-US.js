@@ -92,6 +92,9 @@ const enUS = {
   'order.batchDelete.confirm': 'Are you sure you want to delete the selected orders?',
   'order.batchDelete.success': 'Batch deletion successful',
   'order.batchDelete.fail': 'Batch deletion failed',
+  'order.batchExport.success': 'Batch export successful',
+  'order.batchExport.fail': 'Failed to batch export',
+  'order.export.noData': 'No data selected for export',
 
   'login.title': 'System Login',
   'login.username.placeholder': 'Please enter username',
@@ -178,6 +181,22 @@ const enUS = {
   'common.cancel': 'Cancel',
   'common.save': 'Save',
   'common.add': 'Add',
+
+  'table.column.phone': 'Phone',
+  'table.column.productName': 'Product Name',
+  'table.column.productSku': 'Product SKU',
+  'table.column.orderNumber': 'Order Number',
+  'table.column.externalOrderId': 'External Order ID',
+  'table.column.orderAmount': 'Order Amount',
+  'table.column.actualCustomer': 'Actual Customer',
+  'table.column.customerPhone': 'Customer Phone',
+  'table.column.orderStatus': 'Order Status',
+  'table.column.orderCreateTime': 'Order Create Time',
+  'table.column.orderUpdateTime': 'Order Update Time',
+  'table.column.orderPreviewUrl': 'Order Preview URL',
+  'table.column.sku': 'SKU',
+  'table.column.createTime': 'Create Time',
+  'table.column.updateTime': 'Update Time',
 };
 
 export default enUS; 

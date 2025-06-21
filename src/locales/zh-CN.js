@@ -84,7 +84,7 @@ const zhCN = {
   'order.delete.fail': '订单删除失败',
   'common.yes': '确定',
   'common.no': '取消',
-  'table.column.phone': '联系电话',
+  'table.column.phone': '电话',
   'table.selectAll.allPages': '选择所有页',
   'table.selectAll.clear': '清除所有选择',
   'table.selected.all': '已选择全部数据',
@@ -92,6 +92,9 @@ const zhCN = {
   'order.batchDelete.confirm': '确定要删除选中的订单吗？',
   'order.batchDelete.success': '批量删除成功',
   'order.batchDelete.fail': '批量删除失败',
+  'order.batchExport.success': '批量导出成功',
+  'order.batchExport.fail': '批量导出失败',
+  'order.export.noData': '没有选择要导出的数据',
 
   'login.title': '系统登录',
   'login.username.placeholder': '用户名',
@@ -141,7 +144,7 @@ const zhCN = {
 
   // 报价单字段
   'quotation.column.sku': 'SKU',
-  'quotation.column.productName': '产品名称',
+  'quotation.column.productName': '商品名称',
   'quotation.column.regionCode': '区域代码',
   'quotation.column.productPrice': '产品价格',
   'quotation.column.purchaseCost': '采购成本',
@@ -183,6 +186,22 @@ const zhCN = {
   'form.required': '此字段为必填项',
   'form.number.required': '请输入数字',
   'form.validation.fail': '表单验证失败',
+
+  'table.column.phone': '电话',
+  'table.column.productName': '商品名称',
+  'table.column.productSku': '商品SKU',
+  'table.column.orderNumber': '订单号',
+  'table.column.externalOrderId': '外部订单ID',
+  'table.column.orderAmount': '订单金额',
+  'table.column.actualCustomer': '实际客户',
+  'table.column.customerPhone': '客户电话',
+  'table.column.orderStatus': '订单状态',
+  'table.column.orderCreateTime': '订单创建时间',
+  'table.column.orderUpdateTime': '订单更新时间',
+  'table.column.orderPreviewUrl': '订单预览URL',
+  'table.column.sku': 'SKU',
+  'table.column.createTime': '创建时间',
+  'table.column.updateTime': '更新时间',
 };
 
 export default zhCN; 
