@@ -1,145 +1,275 @@
-import { Space, Tag, Button, Image, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import React from 'react';
+import { Button, Space, Tag, Image } from 'antd';
+import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { useIntl } from 'react-intl';
 
-export const getOrderColumns = (intl, { onEdit, onDelete, refreshData, handleDelete, isSelectionMode }) => [
-    {
-        title: intl.formatMessage({ id: 'table.column.orderNo' }),
-        dataIndex: 'orderNo',
-        key: 'orderNo',
-        width: 150,
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.externalOrderNo' }),
-        dataIndex: 'externalOrderNo',
-        key: 'externalOrderNo',
-        width: 150,
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.productInfo' }),
-        dataIndex: 'productInfo',
-        key: 'productInfo',
-        width: 300,
-        render: (text, record) => (
-            <Space direction="vertical" size="small">
-                <div>{record.productName}</div>
-                <div style={{ color: '#666' }}>{record.productSku}</div>
-            </Space>
-        ),
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.amount' }),
-        dataIndex: 'amount',
-        key: 'amount',
-        width: 120,
-        align: 'right',
-        render: (amount) => `¥${amount.toFixed(2)}`,
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.receiver' }),
-        dataIndex: 'receiver',
-        key: 'receiver',
-        width: 150,
-        render: (text, record) => (
-            <Space direction="vertical" size="small">
-                <div>{record.receiver}</div>
-                <div style={{ color: '#666' }}>{record.phone}</div>
-            </Space>
-        ),
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.status' }),
-        dataIndex: 'status',
-        key: 'status',
-        width: 120,
-        render: (status) => {
-            const statusConfig = {
-                pending: { color: 'gold', text: intl.formatMessage({ id: 'order.search.status.pending' }) },
-                completed: { color: 'green', text: intl.formatMessage({ id: 'order.search.status.completed' }) },
-                cancelled: { color: 'red', text: intl.formatMessage({ id: 'order.search.status.cancelled' }) },
-            };
-            
-            return (
-                <Tag color={statusConfig[status]?.color}>
-                    {statusConfig[status]?.text}
-                </Tag>
-            );
+export const getOrderColumns = (intl, { onEdit, refreshData, handleDelete, isSelectionMode }) => {
+    return [
+        {
+            title: intl.formatMessage({ id: 'order.column.orderId' }),
+            dataIndex: 'orderId',
+            key: 'orderId',
+            width: 100,
+            fixed: 'left',
         },
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.createTime' }),
-        dataIndex: 'createTime',
-        key: 'createTime',
-        width: 180,
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.image' }),
-        dataIndex: 'productImage',
-        key: 'productImage',
-        width: 100,
-        render: (image) => (
-            image ? (
-                <Image
-                    src={image}
-                    style={{
-                        width: '50px',
-                        height: '50px',
-                        objectFit: 'cover',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
-                    fallback="/fallback-image.png"
-                />
-            ) : (
-                <div style={{
-                    width: '50px',
-                    height: '50px',
-                    background: '#f5f5f5',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    N/A
+        {
+            title: intl.formatMessage({ id: 'order.column.sku' }),
+            dataIndex: 'sku',
+            key: 'sku',
+            width: 120,
+            fixed: 'left',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.productName' }),
+            dataIndex: 'productName',
+            key: 'productName',
+            width: 300,
+            ellipsis: true,
+            render: (text) => (
+                <div title={text} style={{ maxWidth: 280 }}>
+                    {text}
                 </div>
-            )
-        ),
-    },
-    {
-        title: intl.formatMessage({ id: 'table.column.operation' }),
-        key: 'operation',
-        fixed: 'right',
-        width: 100,
-        render: (_, record) => (
-            !isSelectionMode && (
-                <Space direction="vertical" size={0} style={{ width: '100%' }}>
+            ),
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.skuTic' }),
+            dataIndex: 'skuTic',
+            key: 'skuTic',
+            width: 150,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.quantity' }),
+            dataIndex: 'quantity',
+            key: 'quantity',
+            width: 80,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.price' }),
+            dataIndex: 'price',
+            key: 'price',
+            width: 100,
+            render: (price) => price ? `¥${Number(price).toFixed(2)}` : '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.quotedPrice' }),
+            dataIndex: 'quotedPrice',
+            key: 'quotedPrice',
+            width: 100,
+            render: (price) => price ? `¥${Number(price).toFixed(2)}` : '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.shippingFullName' }),
+            dataIndex: 'shippingFullName',
+            key: 'shippingFullName',
+            width: 150,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.address1' }),
+            dataIndex: 'address1',
+            key: 'address1',
+            width: 200,
+            ellipsis: true,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.address2' }),
+            dataIndex: 'address2',
+            key: 'address2',
+            width: 150,
+            render: (text) => text || '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.city' }),
+            dataIndex: 'city',
+            key: 'city',
+            width: 120,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.state' }),
+            dataIndex: 'state',
+            key: 'state',
+            width: 100,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.country' }),
+            dataIndex: 'country',
+            key: 'country',
+            width: 80,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.zip' }),
+            dataIndex: 'zip',
+            key: 'zip',
+            width: 100,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.phone' }),
+            dataIndex: 'phone',
+            key: 'phone',
+            width: 120,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.email' }),
+            dataIndex: 'email',
+            key: 'email',
+            width: 180,
+            render: (text) => text || '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.shippingMethod' }),
+            dataIndex: 'shippingMethod',
+            key: 'shippingMethod',
+            width: 150,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.orderPreviewUrl' }),
+            dataIndex: 'orderPreviewUrl',
+            key: 'orderPreviewUrl',
+            width: 120,
+            render: (url) => url ? (
+                <Button 
+                    type="link" 
+                    icon={<EyeOutlined />}
+                    onClick={() => window.open(url, '_blank')}
+                >
+                    {intl.formatMessage({ id: 'order.preview' })}
+                </Button>
+            ) : '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.designUrl' }),
+            dataIndex: 'designUrl',
+            key: 'designUrl',
+            width: 120,
+            render: (url) => url ? (
+                <Button 
+                    type="link" 
+                    icon={<EyeOutlined />}
+                    onClick={() => window.open(url, '_blank')}
+                >
+                    {intl.formatMessage({ id: 'order.design' })}
+                </Button>
+            ) : '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.color' }),
+            dataIndex: 'color',
+            key: 'color',
+            width: 100,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.size' }),
+            dataIndex: 'size',
+            key: 'size',
+            width: 150,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.customizationUrl' }),
+            dataIndex: 'customizationUrl',
+            key: 'customizationUrl',
+            width: 120,
+            render: (url) => url ? (
+                <Button 
+                    type="link" 
+                    icon={<EyeOutlined />}
+                    onClick={() => window.open(url, '_blank')}
+                >
+                    {intl.formatMessage({ id: 'order.customization' })}
+                </Button>
+            ) : '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.customilyUniqId' }),
+            dataIndex: 'customilyUniqId',
+            key: 'customilyUniqId',
+            width: 150,
+            render: (text) => text || '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.uniqField' }),
+            dataIndex: 'uniqField',
+            key: 'uniqField',
+            width: 120,
+            render: (text) => text || '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.orderCreateTime' }),
+            dataIndex: 'orderCreateTime',
+            key: 'orderCreateTime',
+            width: 180,
+            render: (time) => time ? new Date(time).toLocaleString() : '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.fulfillmentFields' }),
+            dataIndex: 'fulfillmentFields',
+            key: 'fulfillmentFields',
+            width: 150,
+            render: (text) => text || '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.shopify' }),
+            dataIndex: 'shopify',
+            key: 'shopify',
+            width: 100,
+            render: (text) => text || '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.shopifyProductType' }),
+            dataIndex: 'shopifyProductType',
+            key: 'shopifyProductType',
+            width: 150,
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.numberOfNames' }),
+            dataIndex: 'numberOfNames',
+            key: 'numberOfNames',
+            width: 120,
+            render: (text) => text || '-',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.orderStatus' }),
+            dataIndex: 'orderStatus',
+            key: 'orderStatus',
+            width: 120,
+            fixed: 'right',
+            render: (status) => {
+                const statusConfig = {
+                    'WAIT_QUOTATION': { color: 'orange', text: intl.formatMessage({ id: 'order.status.waitQuotation' }) },
+                    'QUOTED': { color: 'blue', text: intl.formatMessage({ id: 'order.status.quoted' }) },
+                    'CONFIRMED': { color: 'green', text: intl.formatMessage({ id: 'order.status.confirmed' }) },
+                    'SHIPPED': { color: 'purple', text: intl.formatMessage({ id: 'order.status.shipped' }) },
+                    'DELIVERED': { color: 'green', text: intl.formatMessage({ id: 'order.status.delivered' }) },
+                    'CANCELLED': { color: 'red', text: intl.formatMessage({ id: 'order.status.cancelled' }) },
+                };
+                const config = statusConfig[status] || { color: 'default', text: status };
+                return <Tag color={config.color}>{config.text}</Tag>;
+            },
+        },
+        {
+            title: intl.formatMessage({ id: 'common.operation' }),
+            key: 'operation',
+            width: 120,
+            fixed: 'right',
+            render: (_, record) => (
+                <Space size="small">
                     <Button
                         type="link"
                         size="small"
                         icon={<EditOutlined />}
                         onClick={() => onEdit(record)}
-                        style={{ padding: '4px 0' }}
                     >
-                        {intl.formatMessage({ id: 'table.operation.edit' })}
+                        {intl.formatMessage({ id: 'common.edit' })}
                     </Button>
-                    <Popconfirm
-                        title={intl.formatMessage({ id: 'order.delete.confirm' })}
-                        onConfirm={() => handleDelete(record)}
-                        okText={intl.formatMessage({ id: 'common.yes' })}
-                        cancelText={intl.formatMessage({ id: 'common.no' })}
+                    <Button
+                        type="link"
+                        size="small"
+                        danger
+                        icon={<DeleteOutlined />}
+                        onClick={() => handleDelete(record)}
                     >
-                        <Button
-                            type="link"
-                            size="small"
-                            danger
-                            icon={<DeleteOutlined />}
-                            style={{ padding: '4px 0' }}
-                        >
-                            {intl.formatMessage({ id: 'table.operation.delete' })}
-                        </Button>
-                    </Popconfirm>
+                        {intl.formatMessage({ id: 'common.delete' })}
+                    </Button>
                 </Space>
-            )
-        ),
-    },
-]; 
+            ),
+        },
+    ];
+}; 

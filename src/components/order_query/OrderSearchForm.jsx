@@ -22,14 +22,54 @@ const OrderSearchForm = () => {
 
     const transformOrderData = (apiData) => {
         return apiData.map(item => ({
+            // 基础信息
+            orderId: item.orderId,
+            sku: item.sku,
+            productName: item.productName,
+            skuTic: item.skuTic,
+            quantity: item.quantity,
+            price: item.price,
+            quotedPrice: item.quotedPrice, // 添加报价价格字段
+            
+            // 收货人信息
+            shippingFullName: item.shippingFullName,
+            address1: item.address1,
+            address2: item.address2,
+            city: item.city,
+            state: item.state,
+            country: item.country,
+            zip: item.zip,
+            phone: item.phone,
+            email: item.email,
+            shippingMethod: item.shippingMethod,
+            
+            // 链接和设计信息
+            orderPreviewUrl: item.orderPreviewUrl,
+            designUrl: item.designUrl,
+            color: item.color,
+            size: item.size,
+            customizationUrl: item.customizationUrl,
+            
+            // 其他字段
+            customilyUniqId: item.customilyUniqId,
+            uniqField: item.uniqField,
+            orderCreateTime: item.orderCreateTime,
+            fulfillmentFields: item.fulfillmentFields,
+            shopify: item.shopify,
+            shopifyProductType: item.shopifyProductType,
+            numberOfNames: item.numberOfNames,
+            
+            // 订单状态
+            orderStatus: item.orderStatus,
+            
+            // 保留原有字段用于兼容性
             orderNo: item.orderNumber,
             externalOrderNo: item.externalOrderId,
-            productName: item.productName,
             productSku: item.sku,
             amount: parseFloat(item.orderAmount),
             receiver: item.actualCustomer,
-            phone: item.customerPhone,
-            status: item.orderStatus.toLowerCase(),
+            customerPhone: item.customerPhone,
+            status: item.orderStatus?.toLowerCase(),
             createTime: item.orderCreateTime,
             productImage: item.orderPreviewUrl || '/fallback-image.png'
         }));

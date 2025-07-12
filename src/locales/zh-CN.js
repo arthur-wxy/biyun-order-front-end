@@ -202,6 +202,57 @@ const zhCN = {
   'table.column.sku': 'SKU',
   'table.column.createTime': '创建时间',
   'table.column.updateTime': '更新时间',
+
+  // 订单表格列标题
+  'order.column.orderId': '订单ID',
+  'order.column.sku': 'SKU',
+  'order.column.productName': '产品名称',
+  'order.column.skuTic': 'SKU TIC',
+  'order.column.attribute': '属性',
+  'order.column.quantity': '数量',
+  'order.column.price': '价格',
+  'order.column.quotedPrice': '报价价格',
+  'order.column.shippingFullName': '收货人姓名',
+  'order.column.address1': '地址1',
+  'order.column.address2': '地址2',
+  'order.column.city': '城市',
+  'order.column.state': '州/省',
+  'order.column.country': '国家',
+  'order.column.zip': '邮编',
+  'order.column.phone': '电话',
+  'order.column.email': '邮箱',
+  'order.column.shippingMethod': '配送方式',
+  'order.column.orderPreviewUrl': '订单预览',
+  'order.column.designUrl': '设计链接',
+  'order.column.color': '颜色',
+  'order.column.size': '尺寸',
+  'order.column.customizationUrl': '定制链接',
+  'order.column.customilyUniqId': 'Customily唯一ID',
+  'order.column.uniqField': '唯一字段',
+  'order.column.orderCreateTime': '订单创建时间',
+  'order.column.fulfillmentFields': '履约字段',
+  'order.column.shopify': 'Shopify',
+  'order.column.shopifyProductType': 'Shopify产品类型',
+  'order.column.numberOfNames': '姓名数量',
+  'order.column.orderStatus': '订单状态',
+  
+  // 订单状态
+  'order.status.waitQuotation': '待报价',
+  'order.status.quoted': '已报价',
+  'order.status.confirmed': '已确认',
+  'order.status.shipped': '已发货',
+  'order.status.delivered': '已送达',
+  'order.status.cancelled': '已取消',
+  
+  // 操作按钮
+  'order.preview': '预览',
+  'order.design': '设计',
+  'order.customization': '定制',
+  
+  // 通用操作
+  'common.operation': '操作',
+  'common.edit': '编辑',
+  'common.delete': '删除',
 };
 
 export default zhCN; 

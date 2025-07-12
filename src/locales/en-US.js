@@ -197,6 +197,57 @@ const enUS = {
   'table.column.sku': 'SKU',
   'table.column.createTime': 'Create Time',
   'table.column.updateTime': 'Update Time',
+
+  // 订单表格列标题
+  'order.column.orderId': 'Order ID',
+  'order.column.sku': 'SKU',
+  'order.column.productName': 'Product Name',
+  'order.column.skuTic': 'SKU TIC',
+  'order.column.attribute': 'Attribute',
+  'order.column.quantity': 'Quantity',
+  'order.column.price': 'Price',
+  'order.column.quotedPrice': 'Quoted Price',
+  'order.column.shippingFullName': 'Shipping Full Name',
+  'order.column.address1': 'Address 1',
+  'order.column.address2': 'Address 2',
+  'order.column.city': 'City',
+  'order.column.state': 'State',
+  'order.column.country': 'Country',
+  'order.column.zip': 'ZIP',
+  'order.column.phone': 'Phone',
+  'order.column.email': 'Email',
+  'order.column.shippingMethod': 'Shipping Method',
+  'order.column.orderPreviewUrl': 'Order Preview',
+  'order.column.designUrl': 'Design URL',
+  'order.column.color': 'Color',
+  'order.column.size': 'Size',
+  'order.column.customizationUrl': 'Customization URL',
+  'order.column.customilyUniqId': 'Customily Unique ID',
+  'order.column.uniqField': 'Unique Field',
+  'order.column.orderCreateTime': 'Order Create Time',
+  'order.column.fulfillmentFields': 'Fulfillment Fields',
+  'order.column.shopify': 'Shopify',
+  'order.column.shopifyProductType': 'Shopify Product Type',
+  'order.column.numberOfNames': 'Number of Names',
+  'order.column.orderStatus': 'Order Status',
+  
+  // 订单状态
+  'order.status.waitQuotation': 'Wait Quotation',
+  'order.status.quoted': 'Quoted',
+  'order.status.confirmed': 'Confirmed',
+  'order.status.shipped': 'Shipped',
+  'order.status.delivered': 'Delivered',
+  'order.status.cancelled': 'Cancelled',
+  
+  // 操作按钮
+  'order.preview': 'Preview',
+  'order.design': 'Design',
+  'order.customization': 'Customization',
+  
+  // 通用操作
+  'common.operation': 'Operation',
+  'common.edit': 'Edit',
+  'common.delete': 'Delete',
 };
 
 export default enUS; 
