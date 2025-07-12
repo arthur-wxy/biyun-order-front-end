@@ -275,7 +275,7 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                     {...restField}
                                                     name={[name, 'grossProfit']}
                                                     label={intl.formatMessage({ id: 'quotation.column.grossProfit' })}
-                                                    rules={numberRules}
+                                                    rules={optionalNumberRules}
                                                 >
                                                     <InputNumber
                                                         style={{ width: '100%' }}
@@ -291,7 +291,7 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                     {...restField}
                                                     name={[name, 'grossProfitRate']}
                                                     label={intl.formatMessage({ id: 'quotation.column.grossProfitRate' })}
-                                                    rules={numberRules}
+                                                    rules={optionalNumberRules}
                                                 >
                                                     <InputNumber
                                                         style={{ width: '100%' }}
@@ -317,7 +317,6 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                     {...restField}
                                                     name={[name, 'estimatedProcessingTime']}
                                                     label={intl.formatMessage({ id: 'quotation.column.estimatedProcessingTime' })}
-                                                    rules={requiredRule}
                                                 >
                                                     <Input />
                                                 </Form.Item>
@@ -327,7 +326,6 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                     {...restField}
                                                     name={[name, 'shippingLine']}
                                                     label={intl.formatMessage({ id: 'quotation.column.shippingLine' })}
-                                                    rules={requiredRule}
                                                 >
                                                     <Input />
                                                 </Form.Item>
