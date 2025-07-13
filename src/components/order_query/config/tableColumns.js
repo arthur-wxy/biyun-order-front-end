@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Space, Tag, Image } from 'antd';
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
+import '../styles/ProductImage.css';
 
 export const getOrderColumns = (intl, { onEdit, refreshData, handleDelete, isSelectionMode }) => {
     return [
@@ -11,6 +12,35 @@ export const getOrderColumns = (intl, { onEdit, refreshData, handleDelete, isSel
             key: 'orderId',
             width: 100,
             fixed: 'left',
+        },
+        {
+            title: intl.formatMessage({ id: 'order.column.productImage' }),
+            dataIndex: 'productImage',
+            key: 'productImage',
+            width: 80,
+            fixed: 'left',
+            render: (_, record) => {
+                const imageUrl = record.orderPreviewUrl || record.designUrl;
+                                return imageUrl ? (
+                    <Image
+                        width={50}
+                        height={50}
+                        src={imageUrl}
+                        alt="Product"
+                        className="product-image"
+                        style={{ objectFit: 'cover', borderRadius: '4px' }}
+                        fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAwSDCIMogwMCcmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsis7PPOq3QdDFcvjV3jOD1boQVTPQrgSkktTgbSf4A4LbmgqISBgTEFyFYuLykAsTuAbJEioKOA7DkgdjqEvQHEToKwj4DVhAQ5A9k3gGyB5IxEoBmML4BsnSQk8XQkNtReEOBxcfXxUQg1Mjc0dyHgXNJBSWpFCYh2zi+oLMpMzyhRcASGUqqCZ16yno6CkYGRAQMDKMwhqj/fAIcloxgHQqxAjIHBEugw5sUIsSQpBobtQPdLciLEVJYzMPBHMDBsayhILEqEO4DxG0txmrERhM29nYGBddr//5/DGRjYNRkY/l7////39v///y4Dmn+LgeHANwDrkl1AuO+pmgAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAwqADAAQAAAABAAAAwwAAAAD9b/HnAAAHlklEQVR4Ae3dP3Ik1RnG4W+FgYxN"
+                        preview={{
+                            mask: intl.formatMessage({ id: 'order.column.clickToPreview' }),
+                            maskClassName: 'custom-image-mask'
+                        }}
+                    />
+                ) : (
+                    <div className="no-image-placeholder">
+                        {intl.formatMessage({ id: 'order.column.noImage' })}
+                    </div>
+                );
+            },
         },
         {
             title: intl.formatMessage({ id: 'order.column.sku' }),

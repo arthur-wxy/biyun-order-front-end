@@ -82,8 +82,13 @@ const OrderSearchForm = () => {
             const queryParams = {
                 currentPage: pagination.current,
                 pageSize: pagination.pageSize,
+                orderId: restParams.orderId || '',
                 orderNumber: restParams.orderNo || '',
                 externalOrderId: restParams.externalOrderNo || '',
+                sku: restParams.sku || '',
+                skuTic: restParams.skuTic || '',
+                productName: restParams.productName || '',
+                shippingFullName: restParams.shippingFullName || '',
                 orderStatus: restParams.status || '',
                 startTime: dateRange?.[0]?.valueOf() || '',
                 endTime: dateRange?.[1]?.valueOf() || '',
@@ -185,7 +190,7 @@ const OrderSearchForm = () => {
                 >
                     <Row gutter={24}>
                         {searchFields.map((field) => (
-                            <Col span={8} key={field.name}>
+                            <Col span={6} key={field.name}>
                                 <SearchField {...field} />
                             </Col>
                         ))}

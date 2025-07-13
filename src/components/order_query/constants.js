@@ -1,5 +1,10 @@
 export const searchFields = [
   {
+    name: 'orderId',
+    labelId: 'order.search.orderId',
+    type: 'input'
+  },
+  {
     name: 'orderNo',
     labelId: 'order.search.orderNo',
     type: 'input'
@@ -7,6 +12,26 @@ export const searchFields = [
   {
     name: 'externalOrderNo',
     labelId: 'order.search.externalOrderNo',
+    type: 'input'
+  },
+  {
+    name: 'sku',
+    labelId: 'order.search.sku',
+    type: 'input'
+  },
+  {
+    name: 'skuTic',
+    labelId: 'order.search.skuTic',
+    type: 'input'
+  },
+  {
+    name: 'productName',
+    labelId: 'order.search.productName',
+    type: 'input'
+  },
+  {
+    name: 'shippingFullName',
+    labelId: 'order.search.shippingFullName',
     type: 'input'
   },
   {
