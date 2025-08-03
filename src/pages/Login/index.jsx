@@ -3,7 +3,8 @@ import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import request from '../../utils/request';
+import api_request from '../../utils/api_request';
+import login_request from '../../utils/login_request';
 import styles from './index.module.less';
 import loginBg from '../../assets/images/login-bg.png';
 import Header from '../../components/Header';
@@ -19,7 +20,7 @@ const Login = () => {
             params.append('username', values.username);
             params.append('password', values.password);
 
-            const response = await request.post(`/user/login?${params.toString()}`, null, {
+            const response = await login_request.post(`/user/login?${params.toString()}`, null, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept': 'application/json'

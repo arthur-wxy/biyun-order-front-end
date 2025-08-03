@@ -3,7 +3,8 @@ import { Dropdown, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import request from '../../utils/request';
+import api_request from '../../utils/api_request';
+import login_request from '../../utils/login_request';
 import styles from './index.module.less';
 
 const UserStatus = () => {
@@ -14,7 +15,7 @@ const UserStatus = () => {
 
     const handleLogout = async () => {
         try {
-            await request.post('/user/logout');
+            await login_request.post('/user/logout');
             localStorage.removeItem('authToken');
             localStorage.removeItem('username');
             message.success(intl.formatMessage({ id: 'logout.success' }));
