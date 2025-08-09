@@ -13,8 +13,8 @@ const createApiClient = (config) => {
   // 请求拦截器
   instance.interceptors.request.use(
     (config) => {
-      // 如果是文件上传，不设置 Content-Type
-      if (config.data instanceof FormData) {
+      // 如果是文件上传或 URLSearchParams，不设置 Content-Type，由 axios 自动处理
+      if (config.data instanceof FormData || config.data instanceof URLSearchParams) {
         delete config.headers['Content-Type'];
       } else {
         config.headers['Content-Type'] = 'application/json';
@@ -23,7 +23,9 @@ const createApiClient = (config) => {
       // 添加token等认证信息
       const token = localStorage.getItem('authToken');
       if (token) {
-        config.headers.Authorization = `${token}`;
+        // 如果未带 Bearer 前缀，则自动补全
+        const hasBearerPrefix = /^Bearer\s+/i.test(token);
+        config.headers.Authorization = hasBearerPrefix ? token : `Bearer ${token}`;
       }
 
       // 调试日志

@@ -84,15 +84,21 @@ const QuotationTable = () => {
     const handleBatchDelete = async () => {
         try {
             setLoading(true);
-            // TODO: 调用批量删除接口
-            // const response = await api.post('/quotation/batchDelete', { skus: selectedRowKeys });
-            
-            // Mock successful batch deletion
-            setData(data.filter(item => !selectedRowKeys.includes(item.sku)));
-            setSelectedRowKeys([]);
-            message.success(intl.formatMessage({ id: 'quotation.batchDelete.success' }));
+            // 使用 URLSearchParams 以 @RequestParam 方式传参: quotation_ids=1&quotation_ids=2
+            const paramsBody = new URLSearchParams();
+            selectedRowKeys.forEach((id) => paramsBody.append('quotation_ids', id));
+
+            const response = await internalApi.post('/quotationManagement/batchDelete.json', paramsBody);
+            if (response.success) {
+                // 按 quotationId 过滤本地数据
+                setData(data.filter(item => !selectedRowKeys.includes(item.quotationId)));
+                setSelectedRowKeys([]);
+                message.success(intl.formatMessage({ id: 'quotation.batchDelete.success' }));
+            } else {
+                throw new Error(response.message || 'Batch delete failed');
+            }
         } catch (error) {
-            message.error(intl.formatMessage({ id: 'quotation.batchDelete.fail' }));
+            message.error(error.message || intl.formatMessage({ id: 'quotation.batchDelete.fail' }));
         } finally {
             setLoading(false);
         }
@@ -229,8 +235,12 @@ const QuotationTable = () => {
                     message.error(response.message || intl.formatMessage({ id: 'quotation.add.fail' }));
                 }
             } else {
-                // 更新现有报价单
-                const currentQuotation = data.find(item => item.sku === updatedRecord.sku);
+                // 更新现有报价单（即使修改了 SKU，也通过 quotationId 精确匹配）
+                const targetQuotationId = currentRecord?.quotationId;
+                const currentQuotation =
+                    data.find(item => item.quotationId === targetQuotationId) ||
+                    data.find(item => item.sku === currentRecord?.sku);
+
                 if (!currentQuotation) {
                     message.error(intl.formatMessage({ id: 'quotation.edit.fail' }));
                     return;

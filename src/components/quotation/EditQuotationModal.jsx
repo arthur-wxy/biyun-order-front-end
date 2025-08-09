@@ -116,7 +116,7 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                             label={intl.formatMessage({ id: 'quotation.column.sku' })}
                             rules={requiredRule}
                         >
-                            <Input disabled={!isAddMode} />
+                            <Input />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -187,7 +187,7 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                         min={0}
                                                         step={0.01}
                                                         precision={2}
-                                                        prefix="¥"
+                                                        prefix="$"
                                                     />
                                                 </Form.Item>
                                             </Col>
@@ -352,7 +352,7 @@ const EditQuotationModal = ({ visible, initialValues, isAddMode, onCancel, onSuc
                                                         min={0}
                                                         step={0.01}
                                                         precision={2}
-                                                        prefix="¥"
+                                                        prefix="$"
                                                     />
                                                 </Form.Item>
                                             </Col>
